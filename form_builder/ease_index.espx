@@ -1,0 +1,1984 @@
+<# include "_htmlheader.espx" #>
+
+<style type="text/css">
+.placeholder{padding: 100px 0px 100px 0px;text-align: center;}
+.controlBar{position: relative;float: right;width: 30%;min-height: 20px;text-align: right;display: inline;}
+.controlBar div{height: 20px;width: 20px;}
+.formBuilderDrag{width: 20%;min-height: 700px;border: 1px #CCC solid;float: left;margin-left: 3px;background-color: #DCEDF2;}
+.header{width: 100%;height: 25px;font-weight: bold;background-color: #ebebeb;line-height: 25px;border-bottom: 1px #CCC solid;}
+.formHeader{width: 74.3%;padding: 3px;font-weight: bold;background-color: #ebebeb;line-height: 26px;border-left:  1px #CCC solid;border-right:  1px #CCC solid;border-top: 1px #CCC solid;cursor: pointer;}
+.formHeader:hover{background-color: #DCEDF2;}
+.draggableList{list-style-type: none;margin: 0;padding: 0;width: 100%;background-color: #DCEDF2;}
+.draggableList li{padding: 3px;min-height: 25px;color: #888;border: 1px #CCC solid;margin: 3px;background-color: #FFF;border-radius: 3px;}
+.draggableItem{min-height: 25px;color: #888;border: 1px #CCC solid;margin: 3px;cursor: move;}
+.droppableZone{width: 75%;min-height: 700px;border: 1px #CCC solid;float: left;background-color: #FFF;background: #FFF url('/images/grid_light.jpg') no-repeat; background-size: cover;}
+.droppable{list-style-type: none;margin: 0;padding: 0;width: 100%;min-height: 680px;}
+.dropped{padding: 10px 0px 10px 20px;color: #888;margin: 3px;}
+.nestDropped{width: auto;min-height: 45px;margin-top: 10px;}
+.hoverClass{background-color: #a6c9e2;border: 2px #CCC dotted;opacity: 0.5;}
+.activeClass{background-color: #a6c9e2;border: 2px #CCC dotted;opacity: 0.5;}
+.hoverClassNest{background-color: none;border: 2px #CCC dotted;}
+select{min-width: 150px;}
+.mainToolBar{float: right;width: 20px;padding-right: 8px;}
+.toolItem{width: 20px;height: 20px;padding: 3px;background-color: #a6c9e2;border: 1px #469bdd solid;border-radius: 3px;margin-bottom: 3px;cursor: pointer;text-align: center;}
+.toolItem:hover{width: 20px;height: 20px;padding: 3px;background-color: #CCC;border: 1px #469bdd solid;border-radius: 3px;margin-bottom: 3px;cursor: pointer;text-align: center;}
+.toolItemSmall{width: 15px;height: 15px;padding: 3px;background-color: #a6c9e2;border: 1px #469bdd solid;border-radius: 3px;margin-bottom: 3px;cursor: pointer;float: left;margin-left: 3px;text-align: center;}
+.toolItemSmall:hover{width: 15px;height: 15px;padding: 3px;background-color: #CCC;border: 1px #469bdd solid;border-radius: 3px;margin-bottom: 3px;cursor: pointer;float: left;margin-left: 3px;text-align: center;}
+.fa{margin-top: 2px;margin-left: auto;margin-right: auto;}
+.ui-dialog{box-shadow: 2px 2px 3px #bbb;}
+</style>
+<div id="dialog" title="Element Settings" style="display: none;"><center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center></div>
+<div id="dialogRender" title="EASE Snippet" style="display: none;"><pre></pre></div>
+
+<div id="formBuilder" style="width: 100%;min-height: 700px;">
+	<div id="header" class="formHeader" title="Edit Form Properties">
+		<span style="margin-left: 3px;">EASE Form Builder</span>
+		<div id='formsettings' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-gear fa-lg' title='Edit Form Properties'></i></div>
+		<div style="clear: both;"></div>
+	</div>
+
+	<input type="hidden" id="srcname" name="srcname" value="">
+	<input type="hidden" id="srctype" name="srctype" value="">
+	<textarea id="srcstyle" name="srcstyle" style="display: none;"></textarea>
+	<div id='formActionsCreate' style="display: none;">
+		<!-- add inputs for form actions here -->
+		
+	</div>
+	<div id='formActionsUpdate' style="display: none;">
+		<!-- add inputs for form actions here -->
+		
+	</div>
+	<div id='formActionsDelete' style="display: none;">
+		<!-- add inputs for form actions here -->
+		
+	</div>
+	<div id="formBuilderDrop" class="droppableZone"><form><div class='droppable ui-droppable ui-sortable'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div></form></div>
+	<div id="formBuilderDrag" class="formBuilderDrag">
+		<div id="header" class="header">EASE Tool Box</div>
+		<ul id="draggableList" class="draggableList">
+			<li class="draggableItem" title="Drag Me"><label id='Text Box'>Text Box</label><br><input type="text" value=""></li>
+			<li class="draggableItem" title="Drag Me"><label id='Text Area'>Text Area</label><br><textarea> </textarea></li>
+			<li class="draggableItem" title="Drag Me"><label id='Select'>Select</label><br><select><option value=''>Select</option></select></li>
+			<li class="draggableItem" title="Drag Me"><label id='Multiple Select'>Multiple Select</label><br><select multiple><option value=''></option></select></li>
+			<li class="draggableItem" title="Drag Me"><label id='Check Box'>Check Box</label><br><input type="checkbox"></li>
+			<li class="draggableItem" title="Drag Me"><input type="radio"><label id='Radio Button'>Radio Button</label></li>
+			<li class="draggableItem" title="Drag Me"><label id='hr'></label><br><hr></li>
+			<li class="draggableItem" title="Drag Me"><label id='create'></label><br><input type="button" value="Create Button"></li>
+			<li class="draggableItem" title="Drag Me"><label id='update'></label><br><input type="button" value="Update Button"></li>
+			<li class="draggableItem" title="Drag Me"><label id='delete'></label><br><input type="button" value="Delete Button"></li>
+		</ul>
+	</div>
+	<div class="mainToolBar">
+		<div class="toolItem" id="single" onclick="changeLayout('1');"><i class="fa fa-lg" title="Single Column Layout">1</i></div>
+		<div class="toolItem" id="double" onclick="changeLayout('2');"><i class="fa fa-lg" title="Double Column Layout">2</i></div>
+		<div class="toolItem" id="triple" onclick="changeLayout('3');"><i class="fa fa-lg" title="Triple Column Layout">3</i></div>
+		<div class="toolItem" id="render" onclick='renderForm();'><i class="fa fa-html5 fa-lg" title="View EASE Snippet"></i></div>
+		<!-- class="toolItem" id="save" onclick='saveForm();'><i class="fa fa-save fa-lg" title="Save Form HTML"></i></div> --><div 
+		<div class="toolItem" id="clear" onclick='clearForm();'><i class="fa fa-times fa-lg" title="Clear Form HTML"></i></div>
+	</div>
+</div>
+<div style="display: none;" id="codeCleaner"></div>
+<script type="text/javascript">
+
+//execute onload functions and methods
+jQuery(document).ready(function(){
+	
+	//remove newsletter signup
+	$('.newslettersignup').remove();
+	
+	//initialize tool tips
+	$(document).tooltip({ my: "left top+15", at: "left center", collision: "flipfit" });
+	
+	//initialize draggable items
+	$( ".draggableItem" ).draggable({
+		helper: "clone",
+		revert: true,
+		snap: true,
+		start: function(event, ui){
+			ui.helper.css('width', '300px');
+			ui.helper.css('box-shadow', '2px 2px 2px #CCC');
+			ui.helper.css('border', '1px #CCC solid');
+		}
+	});
+	
+	//bind ease form settings button
+	$('.formHeader').click(function(){
+		
+		//initialize settings dialog popup
+		$( "#dialog" ).dialog({
+			autoOpen: false,
+			draggable: true,
+			height: "auto",
+			minWidth: 400,
+			width: "auto",
+			zIndex: 888,
+		    position: {my: "top", at:"top", of: window },
+			title: "Form Settings",
+			close: function(){
+				//revert dialog to pre-initialized state
+				$(this).empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+			},
+			open: function(){
+				
+				//ajax load ease form settings page
+				var url = "/form_builder_dev/ease_options/form_options";
+				$('#dialog').load(url, function(){});
+			},
+			buttons: {
+				Cancel: function() {
+					
+					//revert dialog to pre-initialized state
+					$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+				},
+				Save: function(){
+					
+					//get settings values and store them in settings values holder
+					var srcType = $('#typeProperty').val();
+					var srcName = $('#sdnameProperty').val();
+					var css = $('#cssProperty').val();
+					$('#srctype').val(srcType);
+					$('#srcname').val(srcName);
+					$('#srcstyle').val(css);
+					$('form').attr('style', css);
+					$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+				},
+				Close: function(){
+					
+					//revert dialog to pre-initialized state
+					$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+				}
+			},
+			show: {
+				effect: "fade",
+				duration: 100
+			},
+			hide: {
+				effect: "fade",
+				duration: 100
+			}
+		});	
+		
+		//open dialog
+		$("#dialog").dialog("open");
+	});
+	
+	//initialize droppable items
+	$(".droppable").droppable({
+		activeClass: "activeClass",
+		hoverClass: "hoverClass",
+		accept: '.draggableItem',
+		activate: function(event, ui){
+			//remove all control bars on start of drag - reundency in case control bar present on drag
+			var cbarid = ui.draggable.attr('id');
+			$('#'+cbarid).find('.controlBar').remove();
+		},
+		drop: function(event, ui) {
+			
+			//remove placeholder
+			$( this ).find( ".placeholder" ).remove();
+			
+			//create dropped DOM element and assign unique id for each added element
+			var guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+			$( "<div class='dropped' id='"+guid+"'></div>" ).html(ui.draggable.html()).appendTo(this);
+			
+			//create nestable drop zone and assign unique nested drop zone id
+			var nestGuid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+			$( "<div class='nestDropped' id='"+nestGuid+"'></div>" ).html($('#'+guid)).appendTo(this);
+			
+			/**************** START NESTED DROP INIT ****************/
+			//init nested drop zone and drop draggable item
+			$(".nestDropped").droppable({
+				activeClass: "hoverClassNest",
+				hoverClass: "hoverClassNest",
+				accept: ".nestDropped",
+				activate: function(event, ui){
+					
+					//remove all control bars when dragging starts - this is redundency in case control bar still present at drag
+					var cbarid = ui.draggable.attr('id');
+					$('#'+cbarid).find('.controlBar').remove();
+					
+				},
+				drop: function(event, ui){
+					
+					//ids for mouse binding
+					var droppedId = this.id; //drop zone id
+					var parentId = ui.draggable.parent().attr('id'); //dropped items parent id
+					var guid = ui.draggable.attr('id'); //dropped items id
+					var legacyId = ui.draggable.attr('id'); //dropped items id
+					
+					//remove empty parent container
+					if(parentId != droppedId){
+						
+						//remove all control bars
+						$(this).find('.controlBar').remove();
+						
+						//remove all garbage DOM elements
+						$(this).find('.clearDiv').remove();
+						var count = ui.draggable.parent().find('.dropped').length;
+						var countHelper = ui.draggable.parent().find('.ui-sortable-helper').length;
+						var countPlace = ui.draggable.parent().find('.ui-sortable-placeholder').length;
+						count = ((count - countHelper) - countPlace);
+						
+						//count draggable elements in parent container
+						if(count <= 0){
+							
+							//if draggable container div is empty, remove it
+							ui.draggable.parent().remove();
+						}
+						
+						//remove old dragged item
+						ui.draggable.remove();	
+						
+						//create new '.dropped' DOM elements
+						$( "<div class='dropped' id='"+legacyId+"'></div>" ).html(ui.draggable.find('.dropped').html()).appendTo(this);
+						$(this).append('<div class="clearDiv" style="clear: both;"></div>');
+						$(this).find('.dropped').css('float', 'left');
+					}
+					
+					
+					//bind mouse events
+					$('#'+guid).mouseenter(function(){
+						
+						//mouse over style
+						$(this).css('border', '2px dotted #CCC');
+						
+						//remove all control bars
+						$('#'+guid).find('.controlBar').remove();
+						
+						//append control bar
+						var controlBar = "<div class='controlBar' id='"+guid+"_controlbar'><div id='delete_"+guid+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-times fa-lg' title='Remove This Element.'></i></div><div id='settings_"+guid+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-gear fa-lg' title='Element Settings.'></i></div></div>";
+						$('#'+guid).append(controlBar);
+
+						//bind remove button
+						$('#delete_'+guid).click(function(){
+							var btnVal = $('#'+guid).find('input:button').attr('default');
+							switch(btnVal){
+								case "create button":
+									$('#formActionsCreate').empty();
+									break;
+								case "delete button":
+									$('#formActionsDelete').empty();
+									break;
+								case "update button":
+									$('#formActionsUpdate').empty();
+									break;
+								default:
+									break;
+							}
+							$('#'+guid).remove();
+						});
+
+						//bind settings button
+						var type = $("#"+guid).find("label").attr('id');
+						$('#settings_'+guid).click(function(){
+							$( "#dialog" ).dialog({
+								autoOpen: false,
+								draggable: true,
+								height: "auto",
+								minWidth: 400,
+								width: "auto",
+								zIndex: 888,
+							    position: {my: "top", at:"top", of: window },
+								title: "Settings",
+								close: function(){
+									$(this).empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+								},
+								open: function(){
+									switch(type){
+										case "Text Box":
+											var url = "/form_builder_dev/ease_options/text_box_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Text Area":
+											var url = "/form_builder_dev/ease_options/textarea_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Select":
+											var url = "/form_builder_dev/ease_options/select_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Multiple Select":
+											var url = "/form_builder_dev/ease_options/select_multiple_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Radio Button":
+											var url = "/form_builder_dev/ease_options/radio_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Check Box":
+											var url = "/form_builder_dev/ease_options/check_box_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "hr":
+											var url = "/form_builder_dev/ease_options/file_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "create":
+											var url = "/form_builder_dev/ease_options/create_button_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "update":
+											var url = "/form_builder_dev/ease_options/update_button_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "delete":
+											var url = "/form_builder_dev/ease_options/delete_button_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+									}
+								},
+								buttons: {
+									Cancel: function() {
+										$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+									},
+									Save: function(){
+										var guid = $('#elemId').val();
+										var label = $('#labelProperty').val();
+										var name = $('#nameProperty').val();
+										var id = $('#idProperty').val();
+										var ftype = $('#typeProperty').val();
+										var required = $('#requiredProperty').val();
+										var value = $('#valueProperty').val();
+										var defaultValue = $('#defaultProperty').val();
+										var width = $('#widthProperty').val();
+										var size = $('#sizeProperty').val();
+										var rows = $('#rowsProperty').val();
+										var cols = $('#colsProperty').val();
+										var value = $('#valueProperty').val();
+										var options = $('.option');
+										var actions = $('.action');
+										var updateActions = $('.updateAction');
+										var deleteActions = $('.deleteAction');
+										var css = $('#cssProperty').val();
+
+										switch(type){
+											case "Text Box":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("input").attr('name', name);
+												$("#"+guid).find("input").attr('id', id);
+												$("#"+guid).find("input").attr('type', ftype);
+												$("#"+guid).find("input").attr('value', defaultValue);
+												var ccss = $('#'+guid).find("input").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("input").attr('style', css);
+												if(required !== ""){
+													$("#"+guid).find("input").attr('required', required);
+												}
+												$("#"+guid).find("input").attr('default', value);
+												$("#"+guid).find(".ui-wrapper").css('width', width);
+												$("#"+guid).find("input").css('width', width);
+												break;
+											case "Text Area":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("textarea").attr('name', name);
+												$("#"+guid).find("textarea").attr('id', id);
+												$("#"+guid).find(".ui-wrapper").css('height', rows);
+												$("#"+guid).find(".ui-wrapper").css('width', cols);
+												$("#"+guid).find("textarea").css('height', rows);
+												$("#"+guid).find("textarea").css('width', cols);
+												$("#"+guid).find("textarea").attr('default', value);
+												var ccss = $('#'+guid).find("textarea").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("textarea").attr('style', css);
+												break;
+											case "Select":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("select").attr('name', name);
+												$("#"+guid).find("select").attr('id', id);
+												$("#"+guid).find("select").attr('width', width);
+												$("#"+guid).find("select").attr('default', value);
+												$("#"+guid).find('select').empty();
+												var ccss = $('#'+guid).find("select").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("select").attr('style', css);
+												$(options).each(function(index, value){
+													var val = $('#'+index).val();
+													var o = "<option value='"+val+"'>"+val+"</option>";
+													$("#"+guid).find('select').append(o);
+												});
+												break;
+											case "Radio Button":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("input").attr('name', name);
+												$("#"+guid).find("input").attr('id', id);
+												$("#"+guid).find("input").attr('rows', rows);
+												$("#"+guid).find("input").attr('default', value);
+												$("#"+guid).find("input").attr('value', defaultValue);
+												var ccss = $('#'+guid).find("input").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("input").attr('style', css);
+												break;
+											case "Check Box":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("input").attr('name', name);
+												$("#"+guid).find("input").attr('id', id);
+												$("#"+guid).find("input").attr('rows', rows);
+												$("#"+guid).find("input").attr('default', value);
+												$("#"+guid).find("input").attr('value', defaultValue);
+												var ccss = $('#'+guid).find("input").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("input").attr('style', css);
+												break;
+											case "Multiple Select":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("select").attr('name', name);
+												$("#"+guid).find("select").attr('id', id);
+												$("#"+guid).find("select").attr('size', size);
+												$("#"+guid).find("select").attr('default', value);
+												$("#"+guid).find("select").attr('style', css);
+												$(options).each(function(index){
+													var val = $('#'+index).val();
+													var html = "<option value='"+val+"'>"+val+"</option>";
+													$("#"+guid).find('select').append(html);
+												});
+												break;
+											case "hr":
+												break;
+											case "create":
+												$("#"+guid).find("input:button").attr('value', label);
+												$("#"+guid).find("input:button").attr('name', name);
+												$("#"+guid).find("input:button").attr('default', value);
+												$("#"+guid).find("input:button").attr('id', id);
+												var ccss = $('#'+guid).find("input:button").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("input:button").attr('style', css);
+												var ahtml = "";
+												$(actions).each(function(index, value){
+													var sval = $('#'+index).val();
+													var uval = $('#url_'+index).val();
+													var tval = $('#column_'+index).val();
+													var cval = $('#columnValue_'+index).val();
+													var fval = $('#fromValue_'+index).val();
+													var toval = $('#toValue_'+index).val();
+													var jval = $('#subjectValue_'+index).val();
+													var bval = $('#bodyValue_'+index).val();
+													if(ahtml !== 'undefined'){
+														ahtml = ahtml + "<div id='action_"+index+"' class='createAction' style='width: 100%;'> <input type='text' id='"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+													}
+												});
+												$("#formActionsCreate").html(ahtml);
+												break;
+											case "update":
+												$("#"+guid).find("input:button").attr('value', label);
+												$("#"+guid).find("input:button").attr('name', name);
+												$("#"+guid).find("input:button").attr('default', value);
+												$("#"+guid).find("input:button").attr('id', id);
+												var ccss = $('#'+guid).find("input:button").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("input:button").attr('style', css);
+												var ahtml = "";
+												$(updateActions).each(function(index, value){
+													var sval = $('#ua_'+index).val();
+													var uval = $('#ua_url_'+index).val();
+													var tval = $('#ua_column_'+index).val();
+													var cval = $('#ua_columnValue_'+index).val();
+													var fval = $('#ua_fromValue_'+index).val();
+													var toval = $('#ua_toValue_'+index).val();
+													var jval = $('#ua_subjectValue_'+index).val();
+													var bval = $('#ua_bodyValue_'+index).val();
+													if(ahtml !== 'undefined'){
+														ahtml = ahtml + "<div id='ua_action_"+index+"' class='updateAction' style='width: 100%;'> <input type='text' id='ua_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='ua_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='ua_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='ua_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='ua_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='ua_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='ua_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='ua_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+													}
+												});
+												$("#formActionsUpdate").html(ahtml);
+												break;
+											case "delete":
+												$("#"+guid).find("input:button").attr('value', label);
+												$("#"+guid).find("input:button").attr('name', name);
+												$("#"+guid).find("input:button").attr('default', value);
+												$("#"+guid).find("input:button").attr('id', id);
+												var ccss = $('#'+guid).find("input:button").attr('style')
+												css = ccss + css;
+												$("#"+guid).find("input:button").attr('style', css);
+												var ahtml = "";
+												$(deleteActions).each(function(index, value){
+													var sval = $('#da_'+index).val();
+													var uval = $('#da_url_'+index).val();
+													var tval = $('#da_column_'+index).val();
+													var cval = $('#da_columnValue_'+index).val();
+													var fval = $('#da_fromValue_'+index).val();
+													var toval = $('#da_toValue_'+index).val();
+													var jval = $('#da_subjectValue_'+index).val();
+													var bval = $('#da_bodyValue_'+index).val();
+													if(ahtml !== 'undefined'){
+														ahtml = ahtml + "<div id='da_action_"+index+"' class='deleteAction' style='width: 100%;'> <input type='text' id='da_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='da_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='da_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='da_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='da_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='da_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='da_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='da_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+													}
+												});
+												$("#formActionsDelete").html(ahtml);
+												break;
+										}
+										$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+									}
+								},
+								show: {
+									effect: "fade",
+									duration: 100
+								},
+								hide: {
+									effect: "fade",
+									duration: 100
+								}
+							});	
+							$( "#dialog" ).dialog("open");
+						});
+					});
+					$('#'+guid).mouseleave(function(){
+						var guid = $(this).attr('id');
+						$(this).css('border', 'none');
+						$('#'+guid+'_controlbar').remove();
+					});
+					
+					//resizable init - input and textareas
+					$('#'+guid).find('textarea').resizable({
+						minHeight: 25,
+						minWidth: 100,
+						resize: function(event, ui){
+							$(this).css('width', ui.size.width);
+							$(this).css('height', ui.size.height);
+						}
+					});
+					$('#'+guid).find('input:text').resizable({
+						minHeight: 20,
+						minWidth: 100,
+						resize: function(event, ui){
+							$(this).css('width', ui.size.width);
+							$(this).css('height', ui.size.height);
+						}
+					});
+				
+				}
+			});
+			/**************** END NESTED DROP INIT ******************/
+			
+			//clean up any empty containers after drag and drop
+			var className = ui.draggable.attr('class');
+			if(className != 'draggableItem ui-draggable'){
+				
+				//loop thru and clear empty nestDropped containers
+				$('.nestDropped').each(function(){
+	
+					//get count of dropped divs in each nestDropped container
+					var count = $(this).find('.dropped').length;
+					var countHelper = $(this).find('.ui-sortable-helper').length;
+					var countPlace = $(this).find('.ui-sortable-placeholder').length;
+					count = ((count - countHelper) - countPlace);
+					
+					//if count is 0 remove empty container
+					if(count <= 0){
+						$(this).remove();
+					}
+				});
+				
+				//remove dragged item
+				ui.draggable.remove();
+			}
+			
+			//bind mouse events
+			$('#'+guid).mouseenter(function(){
+				var id = $(this).attr('id');
+				$(this).css('border', '2px dotted #CCC');
+			
+				//remove all control bars
+				$('#'+id).find('.controlBar').remove();
+			
+				//append control bar
+				var controlBar = "<div class='controlBar' id='"+id+"_controlbar'><div id='delete_"+id+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-times fa-lg' title='Remove This Element.'></i></div><div id='settings_"+id+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-gear fa-lg' title='Element Settings.'></i></div></div>";
+				$('#'+id).append(controlBar);
+				
+				//bind remove button
+				$('#delete_'+id).click(function(){
+					var btnVal = $('#'+guid).find('input:button').attr('default');
+					switch(btnVal){
+						case "create button":
+							$('#formActionsCreate').empty();
+							break;
+						case "delete button":
+							$('#formActionsDelete').empty();
+							break;
+						case "update button":
+							$('#formActionsUpdate').empty();
+							break;
+						default:
+							break;
+					}
+					$('#'+guid).remove();
+				});
+				
+				//bind settings button
+				var type = $("#"+id).find("label").attr('id');
+				$('#settings_'+id).click(function(){
+					$( "#dialog" ).dialog({
+						autoOpen: false,
+						colision: "flipfit",
+						draggable: true,
+						height: "auto",
+						minWidth: 400,
+						width: "auto",
+						zIndex: 888,
+					    position: {my: "top", at:"top", of: window },
+						title: "Settings",
+						close: function(){
+							$(this).empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+						},
+						open: function(){
+							switch(type){
+								case "Text Box":
+									var url = "/form_builder_dev/ease_options/text_box_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Text Area":
+									var url = "/form_builder_dev/ease_options/textarea_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Select":
+									var url = "/form_builder_dev/ease_options/select_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Multiple Select":
+									var url = "/form_builder_dev/ease_options/select_multiple_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Radio Button":
+									var url = "/form_builder_dev/ease_options/radio_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Check Box":
+									var url = "/form_builder_dev/ease_options/check_box_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "hr":
+									var url = "/form_builder_dev/ease_options/file_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "create":
+									var url = "/form_builder_dev/ease_options/create_button_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "update":
+									var url = "/form_builder_dev/ease_options/update_button_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "delete":
+									var url = "/form_builder_dev/ease_options/delete_button_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+							}
+						},
+						buttons: {
+							Cancel: function() {
+								$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+							},
+							Save: function(){
+								
+								var guid = $('#elemId').val();
+								var label = $('#labelProperty').val();
+								var name = $('#nameProperty').val();
+								var id = $('#idProperty').val();
+								var ftype = $('#typeProperty').val();
+								var required = $('#requiredProperty').val();
+								var value = $('#valueProperty').val();
+								var defaultValue = $('#defaultProperty').val();
+								var width = $('#widthProperty').val();
+								var size = $('#sizeProperty').val();
+								var rows = $('#rowsProperty').val();
+								var cols = $('#colsProperty').val();
+								var value = $('#valueProperty').val();
+								var options = $('.option');
+								var actions = $('.action');
+								var updateActions = $('.updateAction');
+								var deleteActions = $('.deleteAction');
+								var css = $('#cssProperty').val();
+
+								switch(type){
+									case "Text Box":
+										
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("input").attr('name', name);
+										$("#"+guid).find("input").attr('id', id);
+										$("#"+guid).find("input").attr('type', ftype);
+										$("#"+guid).find("input").attr('easetype', ftype);
+										$("#"+guid).find("input").attr('value', defaultValue);
+										if(required !== ""){
+											$("#"+guid).find("input").attr('required', required);
+										}
+										$("#"+guid).find("input").attr('default', value);
+										$("#"+guid).find(".ui-wrapper").css('width', width);
+										$("#"+guid).find("input").css('width', width);
+										
+										var ccss = $('#'+guid).find("input").attr('style');
+										css = ccss + css;
+										$("#"+guid).find("input").attr('style', css);
+										break;
+									case "Text Area":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("textarea").attr('name', name);
+										$("#"+guid).find("textarea").attr('id', id);
+										$("#"+guid).find(".ui-wrapper").css('height', rows);
+										$("#"+guid).find(".ui-wrapper").css('width', cols);
+										$("#"+guid).find("textarea").css('height', rows);
+										$("#"+guid).find("textarea").css('width', cols);
+										$("#"+guid).find("textarea").attr('default', value);
+										var ccss = $('#'+guid).find("textarea").attr('style');
+										css = ccss + css;
+										$("#"+guid).find("textarea").attr('style', css);
+										break;
+									case "Select":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("select").attr('name', name);
+										$("#"+guid).find("select").attr('id', id);
+										$("#"+guid).find("select").attr('width', width);
+										$("#"+guid).find("select").attr('default', value);
+										var ccss = $('#'+guid).find("select").attr('style')
+										css = ccss + css;
+										$("#"+guid).find("select").attr('style', css);
+										$("#"+guid).find('select').empty();
+										$(options).each(function(index, value){
+											var val = $('#'+index).val();
+											var o = "<option value='"+val+"'>"+val+"</option>";
+											$("#"+guid).find('select').append(o);
+										});
+										break;
+									case "Radio Button":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("input").attr('name', name);
+										$("#"+guid).find("input").attr('id', id);
+										$("#"+guid).find("input").attr('rows', rows);
+										$("#"+guid).find("input").attr('default', value);
+										$("#"+guid).find("input").attr('value', defaultValue);
+										var ccss = $('#'+guid).find("input").attr('style')
+										css = ccss + css;
+										$("#"+guid).find("input").attr('style', css);
+										break;
+									case "Check Box":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("input").attr('name', name);
+										$("#"+guid).find("input").attr('id', id);
+										$("#"+guid).find("input").attr('rows', rows);
+										$("#"+guid).find("input").attr('default', value);
+										$("#"+guid).find("input").attr('value', defaultValue);
+										var ccss = $('#'+guid).find("input").attr('style')
+										css = ccss + css;
+										$("#"+guid).find("input").attr('style', css);
+										break;
+									case "Multiple Select":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("select").attr('name', name);
+										$("#"+guid).find("select").attr('id', id);
+										$("#"+guid).find("select").attr('size', size);
+										$("#"+guid).find("select").attr('default', value);
+										var ccss = $('#'+guid).find("select").attr('style')
+										css = ccss + css;
+										$("#"+guid).find("input").attr('style', css);
+										$(options).each(function(index){
+											var val = $('#'+index).val();
+											var html = "<option value='"+val+"'>"+val+"</option>";
+											$("#"+guid).find('select').append(html);
+										});
+										break;
+									case "hr":
+										break;
+									case "create":
+										$("#"+guid).find("input:button").attr('value', label);
+										$("#"+guid).find("input:button").attr('name', name);
+										$("#"+guid).find("input:button").attr('default', value);
+										$("#"+guid).find("input:button").attr('id', id);
+										var ccss = $('#'+guid).find("input:button").attr('style')
+										css = ccss + css;
+										$("#"+guid).find("input:button").attr('style', css);
+										var ahtml = "";
+										$(actions).each(function(index, value){
+											var sval = $('#'+index).val();
+											var uval = $('#url_'+index).val();
+											var tval = $('#column_'+index).val();
+											var cval = $('#columnValue_'+index).val();
+											var fval = $('#fromValue_'+index).val();
+											var toval = $('#toValue_'+index).val();
+											var jval = $('#subjectValue_'+index).val();
+											var bval = $('#bodyValue_'+index).val();
+											if(ahtml !== 'undefined'){
+												ahtml = ahtml + "<div id='action_"+index+"' class='createAction' style='width: 100%;'> <input type='text' id='"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+											}
+										});
+										$("#formActionsCreate").html(ahtml);
+										break;
+									case "update":
+										$("#"+guid).find("input:button").attr('value', label);
+										$("#"+guid).find("input:button").attr('name', name);
+										$("#"+guid).find("input:button").attr('default', value);
+										$("#"+guid).find("input:button").attr('id', id);
+										var ccss = $('#'+guid).find("input:button").attr('style')
+										css = ccss + css;
+										$("#"+guid).find("input:button").attr('style', css);
+										var ahtml = "";
+										$(updateActions).each(function(index, value){
+											var sval = $('#ua_'+index).val();
+											var uval = $('#ua_url_'+index).val();
+											var tval = $('#ua_column_'+index).val();
+											var cval = $('#ua_columnValue_'+index).val();
+											var fval = $('#ua_fromValue_'+index).val();
+											var toval = $('#ua_toValue_'+index).val();
+											var jval = $('#ua_subjectValue_'+index).val();
+											var bval = $('#ua_bodyValue_'+index).val();
+											if(ahtml !== 'undefined'){
+												ahtml = ahtml + "<div id='ua_action_"+index+"' class='updateAction' style='width: 100%;'> <input type='text' id='ua_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='ua_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='ua_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='ua_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='ua_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='ua_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='ua_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='ua_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+											}
+										});
+										$("#formActionsUpdate").html(ahtml);
+										break;
+									case "delete":
+										$("#"+guid).find("input:button").attr('value', label);
+										$("#"+guid).find("input:button").attr('name', name);
+										$("#"+guid).find("input:button").attr('default', value);
+										$("#"+guid).find("input:button").attr('id', id);
+										var ccss = $('#'+guid).find("input:button").attr('style')
+										css = ccss + css;
+										$("#"+guid).find("input:button").attr('style', css);
+										var ahtml = "";
+										$(deleteActions).each(function(index, value){
+											var sval = $('#da_'+index).val();
+											var uval = $('#da_url_'+index).val();
+											var tval = $('#da_column_'+index).val();
+											var cval = $('#da_columnValue_'+index).val();
+											var fval = $('#da_fromValue_'+index).val();
+											var toval = $('#da_toValue_'+index).val();
+											var jval = $('#da_subjectValue_'+index).val();
+											var bval = $('#da_bodyValue_'+index).val();
+											if(ahtml !== 'undefined'){
+												ahtml = ahtml + "<div id='da_action_"+index+"' class='deleteAction' style='width: 100%;'> <input type='text' id='da_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='da_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='da_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='da_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='da_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='da_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='da_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='da_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+											}
+										});
+										$("#formActionsDelete").html(ahtml);
+										break;
+								}
+								$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+							}
+						},
+						show: {
+							effect: "fade",
+							duration: 100
+						},
+						hide: {
+							effect: "fade",
+							duration: 100
+						}
+					});	
+					$( "#dialog" ).dialog("open");
+				});
+			});
+			$('#'+guid).mouseleave(function(){
+				var id = $(this).attr('id');
+				$(this).css('border', 'none');
+				$('#'+id+'_controlbar').remove();
+			});
+			
+			//resizable init - input and textareas
+			$('#'+guid).find('textarea').resizable({
+				minHeight: 25,
+				minWidth: 100,
+				resize: function(event, ui){
+					$(this).css('width', ui.size.width);
+					$(this).css('height', ui.size.height);
+				}
+			});
+			$('#'+guid).find('input:text').resizable({
+				minHeight: 20,
+				minWidth: 100,
+				resize: function(event, ui){
+					$(this).css('width', ui.size.width);
+					$(this).css('height', ui.size.height);
+				}
+			});
+		}
+	}).sortable({
+		items: ".nestDropped",
+		sort: function() {
+			
+			// gets added unintentionally by droppable interacting with sortable
+			// using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+			$( this ).removeClass( "hoverClass" );
+			
+			//remove control bars on sorting - redundency in case control bars present at sort
+			$('.controlbar').remove();
+		}
+	});
+});
+
+//guid id generator
+function S4() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+}
+
+//code cleaning method
+function cleanCode(){
+	
+	//get code to be cleaned
+	var code = $('.droppableZone').html();
+	
+	//drop code into code cleaner container
+	$('#codeCleaner').html(code);
+	
+	//remove form style
+	$('#codeCleaner').find('form').removeAttr('style');
+	
+	//strip resizable handles
+	$('#codeCleaner').find('.ui-wrapper').each(function(){
+		//remove all resizable handle divs
+		$(this).find('.ui-resizable-handle').remove();
+		
+		//get ui-wrappable inner code and append it to the parent container
+		var h = $(this).html();
+		$(this).parent().append(h);
+		
+		//remove the empty ui-wrapper container
+		$(this).remove();
+	});
+
+}
+
+//render code snippet
+function renderForm(){
+
+	//clean code of junk html
+	var codeClean = cleanCode();
+	
+	//format string as HTML with tabs and line breaks
+	$('#codeCleaner').find('.clearDiv').html("");
+	$('#codeCleaner').find('form').find('.droppable').prepend('<br>&nbsp;&nbsp;&nbsp;&nbsp;');
+	$('#codeCleaner').find('form').find('.droppable').append('<br>');
+	$('#codeCleaner').find('form').find('.droppable').find('.nestDropped').prepend('<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+	$('#codeCleaner').find('form').find('.droppable').find('.nestDropped').append('<br>&nbsp;&nbsp;&nbsp;&nbsp;');
+	$('#codeCleaner').find('form').find('.droppable').find('.nestDropped').find('.dropped').prepend('<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+	$('#codeCleaner').find('form').find('.droppable').find('.nestDropped').find('.dropped').append('<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+	
+	//asign formatted HTML to form variable
+	var form = $('#codeCleaner').html();
+
+	//encode html for use in pre tag
+	form = $('<div/>').text(form).html();
+	
+	//add line breaks betwen closing div and opening div tags
+	form = form.replace(/&lt;\/div&gt;&lt;div/g, "&lt;/div&gt;<br>&lt;div");
+	form = form.replace(/&lt;br&gt;/g, "<br>");
+	
+	//init EASE snippet output dialog
+	$("#dialogRender").dialog({
+		autoOpen: false,
+		draggable: true,
+		height: "auto",
+		minWidth: 600,
+		zIndex: 888,
+	    position: {my: "center", at:"center", of: window },
+		title: "EASE Snippet",
+		open: function(){
+			
+			//raw formatted code
+			var snippet = form;
+
+			//replace double quotes with single quotes for pattern matching
+			snippet = snippet.replace(/(\")/g, "'");
+			
+			//add EASE tag property to text boxes - replace 'default' attribute with <##> tags
+			var reg = /(default=\'[^\']+\')/g;
+			var result;
+			var i = 0;
+			
+			//loop thru all inputs to determine if this is a button or text box
+			while((result = reg.exec(snippet)) != null){
+				var t = result[i];
+				
+				//if pattern found parse value from default attribute and create button ease tag with it
+				if(t != undefined){
+					
+					//get value between double quotes
+					var ret = t.match( /'(.*?)'/ )[1];
+					
+					//detect if this is a button or form item
+					switch(ret){
+						case "create button":
+							var tag = "# "+ret+" #";
+							break;
+						case "update button":
+							var tag = "# "+ret+" #";
+							break;
+						case "delete button":
+							var tag = "# "+ret+" #";
+							break;
+						default:
+							var tag = "# row."+ret+" #";
+							break;
+					}
+					var re = "("+t+")";
+					var regex = new RegExp(re, "ig");
+					snippet = snippet.replace(regex, "<"+tag+">");
+				}
+				
+				//advance pointer
+				if(result.index === reg.lastIndex){
+					reg.lastIndex++;
+				}
+				i++;
+			}
+			
+			//determine input html5 type and add html5 type ease tag
+			var reg = /(easetype=\'[^\']+\')/g;
+			var result;
+			
+			//loop thru all form elements and determine type
+			while((result = reg.exec(snippet)) != null){
+				var t = result[0];
+				
+				//if patter matched replace easetype attribute with ease tag
+				if(t != undefined){
+					
+					//get value between double quotes
+					var ret = t.match( /'(.*?)'/ )[1];
+
+					//detect if this is a button or form item
+					switch(ret){
+						case "text":
+							var tag = "# "+ret+" #";
+							break;
+						case "email":
+							var tag = "# "+ret+" #";
+							break;
+						case "integer":
+							var tag = "# "+ret+" #";
+							break;
+						case "number":
+							var tag = "# "+ret+" #";
+							break;
+						case "dollars":
+							var tag = "# "+ret+" #";
+							break;
+						case "date":
+							var tag = "# "+ret+" #";
+							break;
+						case "url":
+							var tag = "# "+ret+" #";
+							break;
+						default:
+							var tag = "# "+ret+" #";
+							break;
+					}
+					var re = "("+t+")";
+					var regex = new RegExp(re, "ig");
+					snippet = snippet.replace(regex, "<"+tag+">");
+					
+				}
+
+				//advance pointer
+				if(result.index === reg.lastIndex){
+					reg.lastIndex++;
+				}
+			}
+			
+			//create ease form header and form actions
+			var editVar = "#[url.edit]#";
+			var srcType = $('#srctype').val();
+			var srcName = $('#srcname').val();
+			
+			//determin if this is a spreadsheet form or database form
+			if(srcType == 'spreadsheet'){
+				var easeForm = '# start form for spreadsheet "'+srcName+'" <'+editVar+'>;<br>';
+			}else{
+				var easeForm = '# start form for "'+srcName+'" <'+editVar+'>;<br>';
+			}
+			
+			//add css form action to ease form header
+			var cssAction = $('#srcstyle').val();
+			
+			//create form action for css style
+			if(cssAction != '' && cssAction != 'undefined'){
+				createText = 'set form.style to "'+cssAction+'";';
+				
+				//append form action to ease form header
+				easeForm = easeForm + createText + " <br>";
+			}
+			
+			//add ON CREATE form actions to ease form header
+			var createActions = $('.createAction');
+			
+			//loop thre create form actions and create ease formaction text
+			$(createActions).each(function(index, value){
+				var easeAction = $('#'+index).val();
+				var easeUrl = $('#url_'+index).val();
+				var easeColumn = $('#column_'+index).val();
+				var easeValue = $('#columnValue_'+index).val();
+				var easeFromValue = $('#fromValue_'+index).val();
+				var easeToValue = $('#toValue_'+index).val();
+				var easeSubjectValue = $('#subjectValue_'+index).val();
+				var easeBodyValue = $('#bodyValue_'+index).val();
+				var createText = "";
+				
+				//determine what this form action is doing (redirect, set, send email)
+				if(easeAction == 'redirect to'){
+					createText = "when creating " + easeAction + ' "'+easeUrl+'";';
+				}else if(easeAction == 'set'){
+					createText = "when creating " + easeAction + ' '+easeColumn+' to "'+easeValue+'";';
+				}else if(easeAction == 'send email;'){
+					createText = "when creating " + easeAction + ' from_name = "'+easeFromValue+'"; to = "'+easeToValue+'"; subject = "'+easeSubjectValue+'"; type = "html"; body = """'+easeBodyValue+'""";';
+				}else{
+					createText = "<br>";
+				} 
+				 
+				//append form action to ease form header
+				easeForm = easeForm + createText + " <br>";
+			});
+			
+			//add ON UPDATE form actions to ease form header
+			var updateActions = $('.updateAction');
+			
+			//loop thru create form actions and create ease formaction text
+			$(updateActions).each(function(index, value){
+				var easeUpdateAction = $('#ua_'+index).val();
+				var easeUpdateUrl = $('#ua_url_'+index).val();
+				var easeUpdateColumn = $('#ua_column_'+index).val();
+				var easeUpdateValue = $('#ua_columnValue_'+index).val();
+				var easeUpdateFromValue = $('#ua_fromValue_'+index).val();
+				var easeUpdateToValue = $('#ua_toValue_'+index).val();
+				var easeUpdateSubjectValue = $('#ua_subjectValue_'+index).val();
+				var easeUpdateBodyValue = $('#ua_bodyValue_'+index).val();
+				var updateText;
+				
+				//determine what this form action is doing (redirect, set, send email)
+				if(easeUpdateAction == 'redirect to'){
+					updateText = "when updating " + easeUpdateAction + ' "'+easeUpdateUrl+'";';
+				}else if(easeUpdateAction == 'set'){
+					updateText = "when updating " + easeUpdateAction + ' '+easeUpdateColumn+' to "'+easeUpdateValue+'";';
+				}else if(easeUpdateAction == 'send email;'){
+					updateText = "when updating " + easeUpdateAction + ' from_name = "'+easeUpdateFromValue+'"; to = "'+easeUpdateToValue+'"; subject = "'+easeUpdateSubjectValue+'"; type = "html"; body = """'+easeUpdateBodyValue+'""";';
+				}else{
+					updateText = "<br>";
+				} 
+				 
+				//append form action to ease form header
+				easeForm = easeForm + updateText + " <br>";
+			});
+			
+			//add ON DELETE form actions to ease form header
+			var deleteActions = $('.deleteAction');
+			
+			//loop thru delete form actions and create ease formaction text
+			$(deleteActions).each(function(index, value){
+				var easeDeleteAction = $('#da_'+index).val();
+				var easeDeleteUrl = $('#da_url_'+index).val();
+				var easeDeleteColumn = $('#da_column_'+index).val();
+				var easeDeleteValue = $('#da_columnValue_'+index).val();
+				var easeDeleteFromValue = $('#da_fromValue_'+index).val();
+				var easeDeleteToValue = $('#da_toValue_'+index).val();
+				var easeDeleteSubjectValue = $('#da_subjectValue_'+index).val();
+				var easeDeleteBodyValue = $('#da_bodyValue_'+index).val();
+				var deleteText;
+				
+				//determine what this form action is doing (redirect, set, send email)
+				if(easeDeleteAction == 'redirect to'){
+					deleteText = "when deleteing " + easeDeleteAction + ' "'+easeDeleteUrl+'";';
+				}else if(easeDeleteAction == 'set'){
+					deleteText = "when deleteing " + easeDeleteAction + ' '+easeDeleteColumn+' to "'+easeDeleteValue+'";';
+				}else if(easeDeleteAction == 'send email;'){
+					deleteText = "when deleteing " + easeDeleteAction + ' from_name = "'+easeDeleteFromValue+'"; to = "'+easeDeleteToValue+'"; subject = "'+easeDeleteSubjectValue+'"; type = "html"; body = """'+easeDeleteBodyValue+'""";';
+				}else{
+					deleteText = "<br>";
+				}  
+				
+				//append form action to ease form header
+				easeForm = easeForm + deleteText + " <br>";
+			});
+			
+			
+			//close EASE form header bracket and add EASE form closing tag
+			easeForm = easeForm + '#';
+			var endEaseForm = '# end form #';
+			snippet = snippet.replace(/&lt;form&gt;/, "<"+easeForm+"><br>");
+			snippet = snippet.replace(/&lt;\/form&gt;/, "<br><"+endEaseForm+">");
+			
+			//add additional code formatting (indentation and line breaks)
+			snippet = snippet.replace(/&lt;\/div&gt;<br>&lt;div/g, "&lt;/div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div");
+			snippet = snippet.replace(/&lt;\/label&gt;<br>&lt;input/g, "&lt;/label&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input");
+			snippet = snippet.replace(/&lt;\/label&gt;<br>&lt;textarea/g, "&lt;/label&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;textarea");
+			snippet = snippet.replace(/(&amp;nbsp;)/g, "&nbsp;");
+			snippet = snippet.replace(/(class=\'droppable\sui-droppable\sui-sortable\')/g, "");
+			snippet = snippet.replace(/(class=\'nestDropped\sui-droppable\'\s)/g, "");
+			snippet = snippet.replace(/(class=\'dropped\'\s)/g, "");
+			
+			//trim all whitespace from beginning and end of code snippet
+			snippet = snippet.trim();
+			
+			//append code snippet to pre tag in EASE snippet dialog for display
+			$('#dialogRender').find('pre').html(snippet);
+		},
+		buttons: {
+			close: function() {
+				//revert pre to original state
+				$(this).html("<pre></pre>");
+				
+				//close and destroy dialog object for re initialization
+				$(this).dialog("close");
+				$(this).dialog( "destroy" );
+			}
+		},
+		show: {
+			effect: "fade",
+			duration: 100
+		},
+		hide: {
+			effect: "fade",
+			duration: 100
+		}
+	});
+	
+	//open EASE snippet dialog	
+	$( "#dialogRender" ).dialog("open");
+}
+
+//clear entire form of elements
+function clearForm(){
+	
+	//clear all html and restore droppable to pre-init state
+	var html = '<div class="placeholder">Drag EASE Form Elements Here</div>';
+	$('.droppable').html(html);
+}
+
+//save code snippet - NOT IN USE
+function saveForm(){
+	var form = $('.droppableZone').html();
+	form = form.trim();
+	//save form here with ajax call
+}
+
+//change layout columns 1, 2 or 3 columns
+function changeLayout(cols){
+	switch(cols){
+		case "1":
+			var html = "<div class='droppable ui-droppable ui-sortable'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div>";
+			$('.droppableZone').find('form').html(html);
+			var init = initDroppable();
+			break;
+		case "2":
+			var html = "<div class='droppable ui-droppable ui-sortable' style='width: 48%;float: left;'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div><div class='droppable ui-droppable ui-sortable' style='width: 48%;float: right;'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div>";
+			$('.droppableZone').find('form').html(html);
+			var init = initDroppable();
+			break;
+		case "3":
+			var html = "<div class='droppable ui-droppable ui-sortable' style='width: 31%;float: left;'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div><div class='droppable ui-droppable ui-sortable' style='width: 31%;float: left;'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div><div class='droppable ui-droppable ui-sortable' style='width: 31%;float: left;'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div>";
+			$('.droppableZone').find('form').html(html);
+			var init = initDroppable();
+			break;
+		default:
+			var html = "<div class='droppable ui-droppable ui-sortable'><div class='placeholder ui-droppable ui-sortable'>Drag EASE Form Elements Here</div></div>";
+			$('.droppableZone').find('form').html(html);
+			var init = initDroppable();
+			break;
+	}
+}
+
+//re-initialize droppables after change layout
+function initDroppable(){
+	
+	//initialize droppable items
+	$(".droppable").droppable({
+		activeClass: "hoverClass",
+		hoverClass: "hoverClass",
+		accept: '.draggableItem',
+		activate: function(event, ui){
+			//remove all control bars on start of drag - reundency in case control bar present on drag
+			var cbarid = ui.draggable.attr('id');
+			$('#'+cbarid).find('.controlBar').remove();
+		},
+		drop: function(event, ui) {
+			
+			//remove placeholder
+			$( this ).find( ".placeholder" ).remove();
+			
+			//create dropped DOM element and assign unique id for each added element
+			var guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+			$( "<div class='dropped' id='"+guid+"'></div>" ).html(ui.draggable.html()).appendTo(this);
+			
+			//create nestable drop zone and assign unique nested drop zone id
+			var nestGuid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+			$( "<div class='nestDropped' id='"+nestGuid+"'></div>" ).html($('#'+guid)).appendTo(this);
+			
+			/**************** START NESTED DROP INIT ****************/
+			//init nested drop zone and drop draggable item
+			$(".nestDropped").droppable({
+				activeClass: "hoverClassNest",
+				hoverClass: "hoverClassNest",
+				accept: ".nestDropped",
+				activate: function(event, ui){
+					
+					//remove all control bars when dragging starts - this is redundency in case control bar still present at drag
+					var cbarid = ui.draggable.attr('id');
+					$('#'+cbarid).find('.controlBar').remove();
+					
+				},
+				drop: function(event, ui){
+					
+					//ids for mouse binding
+					var droppedId = this.id; //drop zone id
+					var parentId = ui.draggable.parent().attr('id'); //dropped items parent id
+					var guid = ui.draggable.attr('id'); //dropped items id
+					var legacyId = ui.draggable.attr('id'); //dropped items id
+					
+					//remove empty parent container
+					if(parentId != droppedId){
+						
+						//remove all control bars
+						$(this).find('.controlBar').remove();
+						
+						//remove all garbage DOM elements
+						$(this).find('.clearDiv').remove();
+						var count = ui.draggable.parent().find('.dropped').length;
+						var countHelper = ui.draggable.parent().find('.ui-sortable-helper').length;
+						var countPlace = ui.draggable.parent().find('.ui-sortable-placeholder').length;
+						count = ((count - countHelper) - countPlace);
+						
+						//count draggable elements in parent container
+						if(count <= 0){
+							
+							//if draggable container div is empty, remove it
+							ui.draggable.parent().remove();
+						}
+						
+						//remove old dragged item
+						ui.draggable.remove();	
+						
+						//create new '.dropped' DOM elements
+						$( "<div class='dropped' id='"+legacyId+"'></div>" ).html(ui.draggable.find('.dropped').html()).appendTo(this);
+						$(this).append('<div class="clearDiv" style="clear: both;"></div>');
+						$(this).find('.dropped').css('float', 'left');
+					}
+					
+					
+					//bind mouse events
+					$('#'+guid).mouseenter(function(){
+						
+						//mouse over style
+						$(this).css('border', '2px dotted #CCC');
+						
+						//remove all control bars
+						$('#'+guid).find('.controlBar').remove();
+						
+						//append control bar
+						var controlBar = "<div class='controlBar' id='"+guid+"_controlbar'><div id='delete_"+guid+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-times fa-lg' title='Remove This Element.'></i></div><div id='settings_"+guid+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-gear fa-lg' title='Element Settings.'></i></div></div>";
+						$('#'+guid).append(controlBar);
+
+						//bind remove button
+						$('#delete_'+guid).click(function(){
+							var btnVal = $('#'+guid).find('input:button').attr('default');
+							switch(btnVal){
+								case "create button":
+									$('#formActionsCreate').empty();
+									break;
+								case "delete button":
+									$('#formActionsDelete').empty();
+									break;
+								case "update button":
+									$('#formActionsUpdate').empty();
+									break;
+								default:
+									break;
+							}
+							$('#'+guid).remove();
+						});
+
+						//bind settings button
+						var type = $("#"+guid).find("label").attr('id');
+						$('#settings_'+guid).click(function(){
+							$( "#dialog" ).dialog({
+								autoOpen: false,
+								draggable: true,
+								height: "auto",
+								minWidth: 400,
+								width: "auto",
+								zIndex: 888,
+							    position: {my: "top", at:"top", of: '#'+guid },
+								title: "Settings",
+								close: function(){
+									$(this).empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+								},
+								open: function(){
+									switch(type){
+										case "Text Box":
+											var url = "/form_builder_dev/ease_options/text_box_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Text Area":
+											var url = "/form_builder_dev/ease_options/textarea_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Select":
+											var url = "/form_builder_dev/ease_options/select_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Multiple Select":
+											var url = "/form_builder_dev/ease_options/select_multiple_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Radio Button":
+											var url = "/form_builder_dev/ease_options/radio_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "Check Box":
+											var url = "/form_builder_dev/ease_options/check_box_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "hr":
+											var url = "/form_builder_dev/ease_options/file_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "create":
+											var url = "/form_builder_dev/ease_options/create_button_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "update":
+											var url = "/form_builder_dev/ease_options/update_button_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+										case "delete":
+											var url = "/form_builder_dev/ease_options/delete_button_options?id="+guid;
+											$('#dialog').load(url, function(){});
+											break;
+									}
+								},
+								buttons: {
+									Cancel: function() {
+										$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+									},
+									Save: function(){
+										var guid = $('#elemId').val();
+										var label = $('#labelProperty').val();
+										var name = $('#nameProperty').val();
+										var id = $('#idProperty').val();
+										var ftype = $('#typeProperty').val();
+										var required = $('#requiredProperty').val();
+										var value = $('#valueProperty').val();
+										var defaultValue = $('#defaultProperty').val();
+										var width = $('#widthProperty').val();
+										var size = $('#sizeProperty').val();
+										var rows = $('#rowsProperty').val();
+										var cols = $('#colsProperty').val();
+										var value = $('#valueProperty').val();
+										var options = $('.option');
+										var actions = $('.action');
+										var updateActions = $('.updateAction');
+										var deleteActions = $('.deleteAction');
+										var css = $('#cssProperty').val();
+
+										switch(type){
+											case "Text Box":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("input").attr('name', name);
+												$("#"+guid).find("input").attr('id', id);
+												$("#"+guid).find("input").attr('type', ftype);
+												$("#"+guid).find("input").attr('value', defaultValue);
+												$("#"+guid).find("input").attr('style', css);
+												if(required !== ""){
+													$("#"+guid).find("input").attr('required', required);
+												}
+												$("#"+guid).find("input").attr('default', value);
+												$("#"+guid).find(".ui-wrapper").css('width', width);
+												$("#"+guid).find("input").css('width', width);
+												break;
+											case "Text Area":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("textarea").attr('name', name);
+												$("#"+guid).find("textarea").attr('id', id);
+												$("#"+guid).find(".ui-wrapper").css('height', rows);
+												$("#"+guid).find(".ui-wrapper").css('width', cols);
+												$("#"+guid).find("textarea").css('height', rows);
+												$("#"+guid).find("textarea").css('width', cols);
+												$("#"+guid).find("textarea").attr('default', value);
+												$("#"+guid).find("textarea").attr('style', css);
+												$("#"+guid).find("textarea").attr('style', css);
+												break;
+											case "Select":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("select").attr('name', name);
+												$("#"+guid).find("select").attr('id', id);
+												$("#"+guid).find("select").attr('width', width);
+												$("#"+guid).find("select").attr('default', value);
+												$("#"+guid).find('select').empty();
+												$("#"+guid).find("select").attr('style', css);
+												$(options).each(function(index, value){
+													var val = $('#'+index).val();
+													var o = "<option value='"+val+"'>"+val+"</option>";
+													$("#"+guid).find('select').append(o);
+												});
+												break;
+											case "Radio Button":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("input").attr('name', name);
+												$("#"+guid).find("input").attr('id', id);
+												$("#"+guid).find("input").attr('rows', rows);
+												$("#"+guid).find("input").attr('default', value);
+												$("#"+guid).find("input").attr('value', defaultValue);
+												$("#"+guid).find("input").attr('style', css);
+												break;
+											case "Check Box":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("input").attr('name', name);
+												$("#"+guid).find("input").attr('id', id);
+												$("#"+guid).find("input").attr('rows', rows);
+												$("#"+guid).find("input").attr('default', value);
+												$("#"+guid).find("input").attr('value', defaultValue);
+												$("#"+guid).find("input").attr('style', css);
+												break;
+											case "Multiple Select":
+												$("#"+guid).find("label").text(label);
+												$("#"+guid).find("select").attr('name', name);
+												$("#"+guid).find("select").attr('id', id);
+												$("#"+guid).find("select").attr('size', size);
+												$("#"+guid).find("select").attr('default', value);
+												$("#"+guid).find("select").attr('style', css);
+												$(options).each(function(index){
+													var val = $('#'+index).val();
+													var html = "<option value='"+val+"'>"+val+"</option>";
+													$("#"+guid).find('select').append(html);
+												});
+												break;
+											case "hr":
+												break;
+											case "create":
+												$("#"+guid).find("input:button").attr('value', label);
+												$("#"+guid).find("input:button").attr('name', name);
+												$("#"+guid).find("input:button").attr('default', value);
+												$("#"+guid).find("input:button").attr('id', id);
+												$("#"+guid).find("input:button").attr('style', css);
+												var ahtml = "";
+												$(actions).each(function(index, value){
+													var sval = $('#'+index).val();
+													var uval = $('#url_'+index).val();
+													var tval = $('#column_'+index).val();
+													var cval = $('#columnValue_'+index).val();
+													var fval = $('#fromValue_'+index).val();
+													var toval = $('#toValue_'+index).val();
+													var jval = $('#subjectValue_'+index).val();
+													var bval = $('#bodyValue_'+index).val();
+													if(ahtml !== 'undefined'){
+														ahtml = ahtml + "<div id='action_"+index+"' class='createAction' style='width: 100%;'> <input type='text' id='"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+													}
+												});
+												$("#formActionsCreate").html(ahtml);
+												break;
+											case "update":
+												$("#"+guid).find("input:button").attr('value', label);
+												$("#"+guid).find("input:button").attr('name', name);
+												$("#"+guid).find("input:button").attr('default', value);
+												$("#"+guid).find("input:button").attr('id', id);
+												$("#"+guid).find("input:button").attr('style', css);
+												var ahtml = "";
+												$(updateActions).each(function(index, value){
+													var sval = $('#ua_'+index).val();
+													var uval = $('#ua_url_'+index).val();
+													var tval = $('#ua_column_'+index).val();
+													var cval = $('#ua_columnValue_'+index).val();
+													var fval = $('#ua_fromValue_'+index).val();
+													var toval = $('#ua_toValue_'+index).val();
+													var jval = $('#ua_subjectValue_'+index).val();
+													var bval = $('#ua_bodyValue_'+index).val();
+													if(ahtml !== 'undefined'){
+														ahtml = ahtml + "<div id='ua_action_"+index+"' class='updateAction' style='width: 100%;'> <input type='text' id='ua_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='ua_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='ua_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='ua_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='ua_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='ua_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='ua_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='ua_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+													}
+												});
+												$("#formActionsUpdate").html(ahtml);
+												break;
+											case "delete":
+												$("#"+guid).find("input:button").attr('value', label);
+												$("#"+guid).find("input:button").attr('name', name);
+												$("#"+guid).find("input:button").attr('default', value);
+												$("#"+guid).find("input:button").attr('id', id);
+												$("#"+guid).find("input:button").attr('style', css);
+												var ahtml = "";
+												$(deleteActions).each(function(index, value){
+													var sval = $('#da_'+index).val();
+													var uval = $('#da_url_'+index).val();
+													var tval = $('#da_column_'+index).val();
+													var cval = $('#da_columnValue_'+index).val();
+													var fval = $('#da_fromValue_'+index).val();
+													var toval = $('#da_toValue_'+index).val();
+													var jval = $('#da_subjectValue_'+index).val();
+													var bval = $('#da_bodyValue_'+index).val();
+													if(ahtml !== 'undefined'){
+														ahtml = ahtml + "<div id='da_action_"+index+"' class='deleteAction' style='width: 100%;'> <input type='text' id='da_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='da_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='da_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='da_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='da_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='da_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='da_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='da_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+													}
+												});
+												$("#formActionsDelete").html(ahtml);
+												break;
+										}
+										$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+									}
+								},
+								show: {
+									effect: "fade",
+									duration: 100
+								},
+								hide: {
+									effect: "fade",
+									duration: 100
+								}
+							});	
+							$( "#dialog" ).dialog("open");
+						});
+					});
+					$('#'+guid).mouseleave(function(){
+						var guid = $(this).attr('id');
+						$(this).css('border', 'none');
+						$('#'+guid+'_controlbar').remove();
+					});
+					
+					//resizable init - input and textareas
+					$('#'+guid).find('textarea').resizable({
+						minHeight: 25,
+						minWidth: 100,
+						resize: function(event, ui){
+							$(this).css('width', ui.size.width);
+							$(this).css('height', ui.size.height);
+						}
+					});
+					$('#'+guid).find('input:text').resizable({
+						minHeight: 20,
+						minWidth: 100,
+						resize: function(event, ui){
+							$(this).css('width', ui.size.width);
+							$(this).css('height', ui.size.height);
+						}
+					});
+				
+				}
+			});
+			/**************** END NESTED DROP INIT ******************/
+			
+			//clean up any empty containers after drag and drop
+			var className = ui.draggable.attr('class');
+			if(className != 'draggableItem ui-draggable'){
+				
+				//loop thru and clear empty nestDropped containers
+				$('.nestDropped').each(function(){
+	
+					//get count of dropped divs in each nestDropped container
+					var count = $(this).find('.dropped').length;
+					var countHelper = $(this).find('.ui-sortable-helper').length;
+					var countPlace = $(this).find('.ui-sortable-placeholder').length;
+					count = ((count - countHelper) - countPlace);
+					
+					//if count is 0 remove empty container
+					if(count <= 0){
+						$(this).remove();
+					}
+				});
+				
+				//remove dragged item
+				ui.draggable.remove();
+			}
+			
+			//bind mouse events
+			$('#'+guid).mouseenter(function(){
+				var id = $(this).attr('id');
+				$(this).css('border', '2px dotted #CCC');
+			
+				//remove all control bars
+				$('#'+id).find('.controlBar').remove();
+			
+				//append control bar
+				var controlBar = "<div class='controlBar' id='"+id+"_controlbar'><div id='delete_"+id+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-times fa-lg' title='Remove This Element.'></i></div><div id='settings_"+id+"' class='toolItem' style='width: 20px;height: 20px;float: right;margin-left: 3px;'><i class='fa fa-gear fa-lg' title='Element Settings.'></i></div></div>";
+				$('#'+id).append(controlBar);
+				
+				//bind remove button
+				$('#delete_'+id).click(function(){
+					var btnVal = $('#'+guid).find('input:button').attr('default');
+					switch(btnVal){
+						case "create button":
+							$('#formActionsCreate').empty();
+							break;
+						case "delete button":
+							$('#formActionsDelete').empty();
+							break;
+						case "update button":
+							$('#formActionsUpdate').empty();
+							break;
+						default:
+							break;
+					}
+					$('#'+guid).remove();
+				});
+				
+				//bind settings button
+				var type = $("#"+id).find("label").attr('id');
+				$('#settings_'+id).click(function(){
+					$( "#dialog" ).dialog({
+						autoOpen: false,
+						draggable: true,
+						height: "auto",
+						minWidth: 400,
+						width: "auto",
+						zIndex: 888,
+					    position: {my: "top", at:"top", of: '#'+id },
+						title: "Settings",
+						close: function(){
+							$(this).empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+						},
+						open: function(){
+							switch(type){
+								case "Text Box":
+									var url = "/form_builder_dev/ease_options/text_box_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Text Area":
+									var url = "/form_builder_dev/ease_options/textarea_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Select":
+									var url = "/form_builder_dev/ease_options/select_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Multiple Select":
+									var url = "/form_builder_dev/ease_options/select_multiple_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Radio Button":
+									var url = "/form_builder_dev/ease_options/radio_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "Check Box":
+									var url = "/form_builder_dev/ease_options/check_box_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "hr":
+									var url = "/form_builder_dev/ease_options/file_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "create":
+									var url = "/form_builder_dev/ease_options/create_button_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "update":
+									var url = "/form_builder_dev/ease_options/update_button_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+								case "delete":
+									var url = "/form_builder_dev/ease_options/delete_button_options?id="+id;
+									$('#dialog').load(url, function(){});
+									break;
+							}
+						},
+						buttons: {
+							Cancel: function() {
+								$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+							},
+							Save: function(){
+								var guid = $('#elemId').val();
+								var label = $('#labelProperty').val();
+								var name = $('#nameProperty').val();
+								var id = $('#idProperty').val();
+								var ftype = $('#typeProperty').val();
+								var required = $('#requiredProperty').val();
+								var value = $('#valueProperty').val();
+								var defaultValue = $('#defaultProperty').val();
+								var width = $('#widthProperty').val();
+								var size = $('#sizeProperty').val();
+								var rows = $('#rowsProperty').val();
+								var cols = $('#colsProperty').val();
+								var value = $('#valueProperty').val();
+								var options = $('.option');
+								var actions = $('.action');
+								var updateActions = $('.updateAction');
+								var deleteActions = $('.deleteAction');
+								var css = $('#cssProperty').val();
+
+								switch(type){
+									case "Text Box":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("input").attr('name', name);
+										$("#"+guid).find("input").attr('id', id);
+										$("#"+guid).find("input").attr('type', ftype);
+										$("#"+guid).find("input").attr('easetype', ftype);
+										$("#"+guid).find("input").attr('value', defaultValue);
+										if(required !== ""){
+											$("#"+guid).find("input").attr('required', required);
+										}
+										$("#"+guid).find("input").attr('default', value);
+										$("#"+guid).find(".ui-wrapper").css('width', width);
+										$("#"+guid).find("input").css('width', width);
+										$("#"+guid).find("input").attr('style', css);
+										break;
+									case "Text Area":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("textarea").attr('name', name);
+										$("#"+guid).find("textarea").attr('id', id);
+										$("#"+guid).find(".ui-wrapper").css('height', rows);
+										$("#"+guid).find(".ui-wrapper").css('width', cols);
+										$("#"+guid).find("textarea").css('height', rows);
+										$("#"+guid).find("textarea").css('width', cols);
+										$("#"+guid).find("textarea").attr('default', value);
+										$("#"+guid).find("textarea").attr('style', css);
+										break;
+									case "Select":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("select").attr('name', name);
+										$("#"+guid).find("select").attr('id', id);
+										$("#"+guid).find("select").attr('width', width);
+										$("#"+guid).find("select").attr('default', value);
+										$("#"+guid).find("select").attr('style', css);
+										$("#"+guid).find('select').empty();
+										$(options).each(function(index, value){
+											var val = $('#'+index).val();
+											var o = "<option value='"+val+"'>"+val+"</option>";
+											$("#"+guid).find('select').append(o);
+										});
+										break;
+									case "Radio Button":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("input").attr('name', name);
+										$("#"+guid).find("input").attr('id', id);
+										$("#"+guid).find("input").attr('rows', rows);
+										$("#"+guid).find("input").attr('default', value);
+										$("#"+guid).find("input").attr('value', defaultValue);
+										$("#"+guid).find("input").attr('style', css);
+										break;
+									case "Check Box":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("input").attr('name', name);
+										$("#"+guid).find("input").attr('id', id);
+										$("#"+guid).find("input").attr('rows', rows);
+										$("#"+guid).find("input").attr('default', value);
+										$("#"+guid).find("input").attr('value', defaultValue);
+										$("#"+guid).find("input").attr('style', css);
+										break;
+									case "Multiple Select":
+										$("#"+guid).find("label").text(label);
+										$("#"+guid).find("select").attr('name', name);
+										$("#"+guid).find("select").attr('id', id);
+										$("#"+guid).find("select").attr('size', size);
+										$("#"+guid).find("select").attr('default', value);
+										$("#"+guid).find("input").attr('style', css);
+										$(options).each(function(index){
+											var val = $('#'+index).val();
+											var html = "<option value='"+val+"'>"+val+"</option>";
+											$("#"+guid).find('select').append(html);
+										});
+										break;
+									case "hr":
+										break;
+									case "create":
+										$("#"+guid).find("input:button").attr('value', label);
+										$("#"+guid).find("input:button").attr('name', name);
+										$("#"+guid).find("input:button").attr('default', value);
+										$("#"+guid).find("input:button").attr('id', id);
+										$("#"+guid).find("input:button").attr('style', css);
+										var ahtml = "";
+										$(actions).each(function(index, value){
+											var sval = $('#'+index).val();
+											var uval = $('#url_'+index).val();
+											var tval = $('#column_'+index).val();
+											var cval = $('#columnValue_'+index).val();
+											var fval = $('#fromValue_'+index).val();
+											var toval = $('#toValue_'+index).val();
+											var jval = $('#subjectValue_'+index).val();
+											var bval = $('#bodyValue_'+index).val();
+											if(ahtml !== 'undefined'){
+												ahtml = ahtml + "<div id='action_"+index+"' class='createAction' style='width: 100%;'> <input type='text' id='"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+											}
+										});
+										$("#formActionsCreate").html(ahtml);
+										break;
+									case "update":
+										$("#"+guid).find("input:button").attr('value', label);
+										$("#"+guid).find("input:button").attr('name', name);
+										$("#"+guid).find("input:button").attr('default', value);
+										$("#"+guid).find("input:button").attr('id', id);
+										$("#"+guid).find("input:button").attr('style', css);
+										var ahtml = "";
+										$(updateActions).each(function(index, value){
+											var sval = $('#ua_'+index).val();
+											var uval = $('#ua_url_'+index).val();
+											var tval = $('#ua_column_'+index).val();
+											var cval = $('#ua_columnValue_'+index).val();
+											var fval = $('#ua_fromValue_'+index).val();
+											var toval = $('#ua_toValue_'+index).val();
+											var jval = $('#ua_subjectValue_'+index).val();
+											var bval = $('#ua_bodyValue_'+index).val();
+											if(ahtml !== 'undefined'){
+												ahtml = ahtml + "<div id='ua_action_"+index+"' class='updateAction' style='width: 100%;'> <input type='text' id='ua_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='ua_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='ua_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='ua_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='ua_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='ua_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='ua_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='ua_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+											}
+										});
+										$("#formActionsUpdate").html(ahtml);
+										break;
+									case "delete":
+										$("#"+guid).find("input:button").attr('value', label);
+										$("#"+guid).find("input:button").attr('name', name);
+										$("#"+guid).find("input:button").attr('default', value);
+										$("#"+guid).find("input:button").attr('id', id);
+										$("#"+guid).find("input:button").attr('style', css);
+										var ahtml = "";
+										$(deleteActions).each(function(index, value){
+											var sval = $('#da_'+index).val();
+											var uval = $('#da_url_'+index).val();
+											var tval = $('#da_column_'+index).val();
+											var cval = $('#da_columnValue_'+index).val();
+											var fval = $('#da_fromValue_'+index).val();
+											var toval = $('#da_toValue_'+index).val();
+											var jval = $('#da_subjectValue_'+index).val();
+											var bval = $('#da_bodyValue_'+index).val();
+											if(ahtml !== 'undefined'){
+												ahtml = ahtml + "<div id='da_action_"+index+"' class='deleteAction' style='width: 100%;'> <input type='text' id='da_"+index+"' value='"+sval+"' style='float: left;'> <input type='text' id='da_url_"+index+"' value='"+uval+"' class='redirect' style='float: left;'> <input type='text' id='da_column_"+index+"' value='"+tval+"' class='set' style='float: left;'> <input type='text' id='da_columnValue_"+index+"' value='"+cval+"' class='set' style='float: left;'> <input type='text' id='da_fromValue_"+index+"' value='"+fval+"' class='email' style='float: left;'> <input type='text' id='da_toValue_"+index+"' value='"+toval+"' class='email' style='float: left;'> <input type='text' id='da_subjectValue_"+index+"' value='"+jval+"' class='email' style='float: left;'> <input type='text' id='da_bodyValue_"+index+"' value='"+bval+"' class='email' style='float: left;'> </div>";
+											}
+										});
+										$("#formActionsDelete").html(ahtml);
+										break;
+								}
+								$(this).dialog("close").empty().html('<center><img src="/images/ajax-loader.gif"><br><br>Loading, Please Wait</center>');
+							}
+						},
+						show: {
+							effect: "fade",
+							duration: 100
+						},
+						hide: {
+							effect: "fade",
+							duration: 100
+						}
+					});	
+					$( "#dialog" ).dialog("open");
+				});
+			});
+			$('#'+guid).mouseleave(function(){
+				var id = $(this).attr('id');
+				$(this).css('border', 'none');
+				$('#'+id+'_controlbar').remove();
+			});
+			
+			//resizable init - input and textareas
+			$('#'+guid).find('textarea').resizable({
+				minHeight: 25,
+				minWidth: 100,
+				resize: function(event, ui){
+					$(this).css('width', ui.size.width);
+					$(this).css('height', ui.size.height);
+				}
+			});
+			$('#'+guid).find('input:text').resizable({
+				minHeight: 20,
+				minWidth: 100,
+				resize: function(event, ui){
+					$(this).css('width', ui.size.width);
+					$(this).css('height', ui.size.height);
+				}
+			});
+		}
+	}).sortable({
+		items: ".nestDropped",
+		sort: function() {
+			
+			// gets added unintentionally by droppable interacting with sortable
+			// using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+			$( this ).removeClass( "hoverClass" );
+			
+			//remove control bars on sorting - redundency in case control bars present at sort
+			$('.controlbar').remove();
+		}
+	});
+}	
+</script>
+
+<# include "_member_footer.espx" #>
+<# include "_htmlfooter.espx" #>

@@ -1,0 +1,113 @@
+<div id="tabs">
+	<ul>
+		<li><a href="#properties">Properties</a></li>
+		<li><a href="#style">Style</a></li>
+	</ul>
+	<div style='width: 300px;' id="properties">
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Label</label><br>
+			<input type='text' name='labelProperty' id='labelProperty' value='Text Box'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Name</label><br>
+			<input type='text' name='nameProperty' id='nameProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element ID</label><br>
+			<input type='text' name='idProperty' id='idProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Size</label><br>
+			<input type='text' name='widthProperty' id='widthProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Column Name</label><br>
+			<input type='text' name='valueProperty' id='valueProperty' title="Spreadsheet or Database Column Name">
+		</div>
+		<div>Options</div>
+		<div id="options" style='width: 100%;'>
+
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<input type='hidden' name='elemId' id='elemId' value='<#[url.id]#>'>
+		</div>
+	</div>
+	<div style='width: 100%;padding: 0;' id="style">
+
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>CSS</label><br>
+			<textarea name='cssProperty' id='cssProperty' style="width: 430px;height: 215;"></textarea>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<input type='hidden' name='elemId' id='elemId' value='<#[url.id]#>'>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<script>
+function addOption(){
+	var options = $('.option');
+	var count = -1;
+	$(options).each(function(index){
+		count = count + 1;
+	});
+	var count = count + 1;
+	var html = "<div id='option_"+count+"' class='option' style='width: 100%;'><input type='text' id='"+count+"' value='' style='float: left;'><div class='toolItemSmall' id='add' onclick='addOption();'><i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i></div><div class='toolItemSmall remove' id='remove_"+count+"' onclick='removeOption(this.id);'><i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i></div></div>";
+	$('#options').append(html);
+}
+function removeOption(id){
+	var idArr = id.split('_');
+	var oid = idArr[1];
+	$('#option_'+oid).remove();
+	var options = $('.option');
+	var count = -1;
+	$(options).each(function(index){
+		count = count + 1;
+		$(this).attr('id', "option_"+count);
+		$(this).find('input').attr('id', count);
+		$(this).find('div.remove').attr('id', "remove_"+count);
+	});
+	if(count == -1){
+		var html = "<div id='option_1' class='option' style='width: 100%;'><input type='text' id='1' value='' style='float: left;'><div class='toolItemSmall' id='add' onclick='addOption();'><i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i></div><div class='toolItemSmall' id='remove_1' onclick='removeOption(this.id);'><i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i></div></div>";
+		$('#options').html(html);
+	} 
+}
+function getOptions(){
+	var guid = $("#elemId").val();
+	var count = -1;
+	var options = $('.option');
+	$('#'+guid).find('select').find('option').each(function(index, value){
+		count = count + 1;
+	});
+	count = count;
+	$('#'+guid).find('select').find('option').each(function(index, value){
+	    var v = value.value;
+		count = count + 1;
+		var html = "<div id='option_"+count+"' class='option' style='width: 100%;'><input type='text' id='"+count+"' value='"+v+"' style='float: left;'><div class='toolItemSmall' id='add' onclick='addOption();'><i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i></div><div class='toolItemSmall' id='remove_"+count+"' onclick='removeOption(this.id);'><i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i></div></div>";
+		$('#options').append(html);
+	});
+	if(count == -1){
+		var html = "<div id='option_1' class='option' style='width: 100%;'><input type='text' id='1' value='' style='float: left;'><div class='toolItemSmall' id='add' onclick='addOption();'><i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i></div><div class='toolItemSmall' id='remove_1' onclick='removeOption(this.id);'><i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i></div></div>";
+		$('#options').html(html);
+	}
+}
+
+jQuery(document).ready(function(){
+	$('#tabs').tabs();
+	var o = getOptions();
+	var guid = $("#elemId").val();
+	var label = $("#"+guid).find("label").text();
+	var name = $("#"+guid).find("select").attr('name');
+	var id = $("#"+guid).find("select").attr('id');
+	var defaultval = $("#"+guid).find("select").attr('default');
+	var width = $("#"+guid).find("select").attr('width');
+	
+	$("#labelProperty").val(label);
+	$("#nameProperty").val(name);
+	$("#idProperty").val(id);
+	$("#valueProperty").val(defaultval);
+	$("#widthProperty").val(width);
+	
+});
+</script>

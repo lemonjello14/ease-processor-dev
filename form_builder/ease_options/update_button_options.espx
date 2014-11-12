@@ -1,0 +1,155 @@
+<style>
+.set{float: left;display: none;margin-left: 3px;}
+.redirect{float: left;margin-left: 3px;}
+.email{float: left;display: none;margin-left: 3px;}
+</style>
+<div id="tabs">
+	<ul>
+		<li><a href="#properties">Properties</a></li>
+		<li><a href="#style">Style</a></li>
+	</ul>
+	<div style='width: 100%;' id="properties">
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Label</label><br>
+			<input type='text' name='labelProperty' id='labelProperty' value=''>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Name</label><br>
+			<input type='text' name='nameProperty' id='nameProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element ID</label><br>
+			<input type='text' name='idProperty' id='idProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;display: none;'>
+			<label>Value</label><br>
+			<input type='hidden' name='valueProperty' id='valueProperty' value='create button'>
+		</div>
+		<div style="margin-bottom: 5px;font-weight: bold;">Additional Form Actions</div>
+		<div id="actions" style='width: 100%;'>
+		
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<input type='hidden' name='elemId' id='elemId' value='<#[url.id]#>'>
+		</div>
+	</div>
+	<div style='width: 100%;padding: 0;' id="style">
+
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>CSS</label><br>
+			<textarea name='cssProperty' id='cssProperty' style="width: 430px;height: 215;"></textarea>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<input type='hidden' name='elemId' id='elemId' value='<#[url.id]#>'>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<script>
+function actionChange(v, i){
+	var id = i.split('_');
+	var i = id[1];
+	if(v == 'set'){
+		$('#update_action_'+i).find('.set').show();
+		$('#update_action_'+i).find('.redirect').hide();
+		$('#update_action_'+i).find('.email').hide();
+		$('.ui-dialog').animate({left: "403px"});
+	}else if(v == 'redirect to'){
+		$('#update_action_'+i).find('.redirect').show();
+		$('#update_action_'+i).find('.set').hide();
+		$('#update_action_'+i).find('.email').hide();
+		$('.ui-dialog').animate({left: "403px"});
+	}else if(v == 'send email;'){
+		$('#update_action_'+i).find('.redirect').hide();
+		$('#update_action_'+i).find('.set').hide();
+		$('#update_action_'+i).find('.email').show();
+		$('.ui-dialog').animate({left: "200px"});
+	}
+}
+
+function addOption(){
+	var actions = $('.action');
+	var count = 0;
+	$(actions).each(function(index){
+		count = count + 1;
+	});
+	var count = count + 1;
+
+	var html = "<div id='update_action_"+count+"' class='updateAction' style='width: 100%;'> <span style='float: left;'>When Updating </span> <select id='ua_"+count+"' style='float: left;' onchange='actionChange(this.value, this.id);'> <option value='redirect to'>redirect to</option> <option value='set'>set</option> <option value='send email;'>send email</option> </select> <input type='text' id='ua_url_"+count+"' value='' class='redirect' title='URL to redirect to after the button has been clicked'> <input type='text' id='ua_column_"+count+"' value='' class='set column' title='The spreadsheet or table column name to set value in.'> <span class='set'>to</span> <input type='text' id='ua_columnValue_"+count+"' value='' class='set columnval' title='The value you will be entering into the spreadsheet or table column'> <input type='text' id='ua_fromValue_"+count+"' value='' class='email fromval' style='display: none;' title='The email address you would like this email to be sent from.'> <input type='text' id='ua_toValue_"+count+"' value='' class='email toval' style='display: none;' title='The email address you would like this email to be sent to.'> <input type='text' id='ua_subjectValue_"+count+"' value='' class='email subjectval' style='display: none;' title='The subject line of the email.'> <textarea id='ua_bodyValue_"+count+"' class='email bodyval' style='display: none;width: 100px;height: 200px;' title='The body of the email.'></textarea> <div class='toolItemSmall' id='add' onclick='addOption();'> <i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i> </div> <div class='toolItemSmall remove' id='remove_"+count+"' onclick='removeOption(this.id);'> <i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i> </div> </div>";
+	$('#actions').append(html);
+}
+
+function removeOption(id){
+	var idArr = id.split('_');
+	var aid = idArr[1];
+	$('#action_'+aid).remove();
+	var actions = $('.action');
+	var count = -1;
+	$(actions).each(function(index){
+		count = count + 1;
+		$(this).attr('id', "action_"+count);
+		$(this).find('select').attr('id', count);
+		$(this).find('.redirect').attr('id', 'url_'+count);
+		$(this).find('.column').attr('id', 'column_'+count);
+		$(this).find('.columnval').attr('id', 'columnValue_'+count);
+		$(this).find('div.remove').attr('id', "remove_"+count);
+	});
+	if(count == -1){
+		var html = "<div id='update_action_0' class='updateAction' style='width: 100%;'> <span style='float: left;'>When Updating </span> <select id='ua_0' style='float: left;' onchange='actionChange(this.value, this.id);'> <option value='redirect to'>redirect to</option> <option value='set'>set</option> <option value='send email;'>send email</option> </select> <input type='text' id='ua_url_0' value='' class='redirect' title='URL to redirect to after the button has been clicked'> <input type='text' id='ua_column_0' value='' class='set column' title='The spreadsheet or table column name to set value in.'> <span class='set'>to</span> <input type='text' id='ua_columnValue_0' value='' class='set columnval' title='The value you will be entering into the spreadsheet or table column'> <input type='text' id='ua_fromValue_0' value='' class='email fromval' style='display: none;' title='The email address you would like this email to be sent from.'> <input type='text' id='ua_toValue_0' value='' class='email toval' style='display: none;' title='The email address you would like this email to be sent to.'> <input type='text' id='ua_subjectValue_0' value='' class='email subjectval' style='display: none;' title='The subject line of the email.'> <textarea id='ua_bodyValue_0' class='email bodyval' style='display: none;width: 100px;height: 200px;' title='The body of the email.'></textarea> <div class='toolItemSmall' id='add' onclick='addOption();'> <i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i> </div> <div class='toolItemSmall remove' id='remove_0' onclick='removeOption(this.id);'> <i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i> </div> <div style='clear: both;'></div> </div>";
+		$('#actions').html(html);
+	} 
+}
+
+function getOptions(){
+	
+	var guid = $("#elemId").val();
+	var actions = $('.updateAction');
+	var replaceHtml = "";
+	var count = -1
+	$('#formActionsUpdate').find('.updateAction').each(function(index, value){
+		count = count + 1;
+	});
+	$('#formActionsUpdate').find('.updateAction').each(function(index, value){
+		
+		var a = $(this).find('#ua_'+index).val();
+		var u = $(this).find('#ua_url_'+index).val();
+		var v = $(this).find('#ua_column_'+index).val();
+		var s = $(this).find('#ua_columnValue_'+index).val();
+		var f = $(this).find('#ua_fromValue_'+index).val();
+		var t = $(this).find('#ua_toValue_'+index).val();
+		var j = $(this).find('#ua_subjectValue_'+index).val();
+		var b = $(this).find('#ua_bodyValue_'+index).val();
+		
+		if(a == 'set'){
+			replaceHtml = replaceHtml + "<div id='update_action_"+index+"' class='updateAction' style='width: 100%;'> <span style='float: left;'>When Updating </span> <select id='ua_"+index+"' style='float: left;' onchange='actionChange(this.value, this.id);'> <option value='redirect to'>redirect to</option> <option value='set' selected>set</option> <option value='send email;' selected>send email</option> </select> <input type='text' id='ua_url_"+index+"' value='"+u+"' class='redirect' style='display: none;' title='URL to redirect to after the button has been clicked'> <input type='text' id='ua_column_"+index+"' value='"+v+"' class='set column' style='display: block;' title='The spreadsheet or table column name to set value in.'> <span class='set' style='display: block;'>to</span> <input type='text' id='ua_columnValue_"+index+"' value='"+s+"' class='set columnval' style='display: block;' title='The value you will be entering into the spreadsheet or table column'> <input type='text' id='ua_fromValue_"+index+"' value='"+f+"' class='email fromval' style='display: none;' title='The email address you would like this email to be sent from.'> <input type='text' id='ua_toValue_"+index+"' value='"+t+"' class='email toval' style='display: none;' title='The email address you would like this email to be sent to.'> <input type='text' id='ua_subjectValue_"+index+"' value='"+j+"' class='email subjectval' style='display: none;' title='The subject line of the email.'> <textarea id='ua_bodyValue_"+index+"' class='email bodyval' style='display: none;width: 100px;height: 200px;' title='The body of the email.'> "+b+" </textarea> <div class='toolItemSmall' id='add' onclick='addOption();'> <i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i> </div> <div class='toolItemSmall remove' id='remove_"+index+"' onclick='removeOption(this.id);'> <i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i> </div> <div style='clear: both;'></div> </div>";
+		}else if(a == 'redirect to'){
+			replaceHtml = replaceHtml + "<div id='update_action_"+index+"' class='updateAction' style='width: 100%;'> <span style='float: left;'>When Updating </span> <select id='ua_"+index+"' style='float: left;' onchange='actionChange(this.value, this.id);'> <option value='redirect to' selected>redirect to</option> <option value='set'>set</option> <option value='send email;'>send email</option> </select> <input type='text' id='ua_url_"+index+"' value='"+u+"' class='redirect' title='URL to redirect to after the button has been clicked'> <input type='text' id='ua_column_"+index+"' value='"+v+"' class='set column' style='display: none;' title='The spreadsheet or table column name to set value in.'> <span class='set' style='display: none;'>to</span> <input type='text' id='ua_columnValue_"+index+"' value='"+s+"' class='set columnval' style='display: none;' title='The value you will be entering into the spreadsheet or table column'> <input type='text' id='ua_fromValue_"+index+"' value='"+f+"' class='email fromval' style='display: none;' title='The email address you would like this email to be sent from.'> <input type='text' id='ua_toValue_"+index+"' value='"+t+"' class='email toval' style='display: none;' title='The email address you would like this email to be sent to.'> <input type='text' id='ua_subjectValue_"+index+"' value='"+j+"' class='email subjectval' style='display: none;' title='The subject line of the email.'> <textarea id='ua_bodyValue_"+index+"' class='email bodyval' style='display: none;width: 100px;height: 200px;' title='The body of the email.'> "+b+" </textarea> <div class='toolItemSmall' id='add' onclick='addOption();'> <i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i> </div> <div class='toolItemSmall remove' id='remove_"+index+"' onclick='removeOption(this.id);'> <i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i> </div> <div style='clear: both;'></div> </div>";
+		}else if(a == 'send email;'){
+			$('.ui-dialog').animate({left: "403px"});
+			replaceHtml = replaceHtml + "<div id='update_action_"+index+"' class='updateAction' style='width: 100%;'> <span style='float: left;'>When Updating </span> <select id='ua_"+index+"' style='float: left;' onchange='actionChange(this.value, this.id);'> <option value='redirect to'>redirect to</option> <option value='set'>set</option> <option value='send email;' selected>send email</option> </select> <input type='text' id='ua_url_"+index+"' value='"+u+"' class='redirect' style='display: none;' title='URL to redirect to after the button has been clicked'> <input type='text' id='ua_column_"+index+"' value='"+v+"' class='set column' style='display: none;' title='The spreadsheet or table column name to set value in.'> <span class='set' style='display: none;'>to</span> <input type='text' id='ua_columnValue_"+index+"' value='"+s+"' class='set columnval' style='display: none;' title='The value you will be entering into the spreadsheet or table column'> <input type='text' id='ua_fromValue_"+index+"' value='"+f+"' class='email fromval' style='display: block;' title='The email address you would like this email to be sent from.'> <input type='text' id='ua_toValue_"+index+"' value='"+t+"' class='email toval' style='display: block;' title='The email address you would like this email to be sent to.'> <input type='text' id='ua_subjectValue_"+index+"' value='"+j+"' class='email subjectval' style='display: block;' title='The subject line of the email.'> <textarea id='ua_bodyValue_"+index+"' class='email bodyval' style='display: block;width: 100px;height: 200px;' title='The body of the email.'> "+b+" </textarea> <div class='toolItemSmall' id='add' onclick='addOption();'> <i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i> </div> <div class='toolItemSmall remove' id='remove_"+index+"' onclick='removeOption(this.id);'> <i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i> </div> <div style='clear: both;'> </div> </div>";
+		}
+	});
+	$('#actions').html(replaceHtml);
+	if(count == -1){
+		var html = "<div id='update_action_0' class='updateAction' style='width: 100%;'> <span style='float: left;'>When Updating </span> <select id='ua_0' style='float: left;' onchange='actionChange(this.value, this.id);'> <option value='redirect to'>redirect to</option> <option value='set'>set</option><option value='send email;'>send email</option> </select> <input type='text' id='ua_url_0' value='' class='redirect' title='URL to redirect to after the button has been clicked'> <input type='text' id='ua_column_0' value='' class='set column' title='The spreadsheet or table column name to set value in.'> <span class='set'>to</span> <input type='text' id='ua_columnValue_0' value='' class='set columnval' title='The value you will be entering into the spreadsheet or table column'><input type='text' id='ua_fromValue_0' value='From:' class='email fromval' style='display: none;' title='The email address you would like this email to be sent from.'><input type='text' id='ua_toValue_0' value='To:' class='email toval' style='display: none;' title='The email address you would like this email to be sent to.'><input type='text' id='ua_subjectValue_0' value='Subject:' class='email subjectval' style='display: none;' title='The subject line of the email.'><textarea id='ua_bodyValue_0' value='' class='email bodyval' style='display: none;width: 100px;height: 200px;' title='The body of the email.'>Body:</textarea><div class='toolItemSmall' id='add' onclick='addOption();'><i class='fa fa-plus fa-lg' title='Add Dropdown Item.'></i></div> <div class='toolItemSmall remove' id='remove_0' onclick='removeOption(this.id);'><i class='fa fa-times fa-lg' title='Remove Dropdown Item.'></i></div> <div style='clear: both;'></div> </div>";
+		$('#actions').html(html);
+	}
+}
+
+jQuery(document).ready(function(){
+	$('#tabs').tabs();
+	var o = getOptions();
+	var guid = $("#elemId").val();
+	var label = $("#"+guid).find("input:button").val();
+	var name = $("#"+guid).find("input:button").attr('name');
+	var id = $("#"+guid).find("input:button").attr('id');
+	var defaultval = $("#"+guid).find("input:button").attr('default');
+	
+	$("#labelProperty").val(label);
+	$("#nameProperty").val(name);
+	$("#idProperty").val(id);
+	
+});
+
+</script>

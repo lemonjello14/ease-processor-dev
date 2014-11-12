@@ -1,0 +1,61 @@
+<div id="tabs">
+	<ul>
+		<li><a href="#properties">Properties</a></li>
+		<li><a href="#style">Style</a></li>
+	</ul>
+	<div style='width: 100%;' id="properties">
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Label</label><br>
+			<input type='text' name='labelProperty' id='labelProperty' value='Text Box'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Name</label><br>
+			<input type='text' name='nameProperty' id='nameProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element ID</label><br>
+			<input type='text' name='idProperty' id='idProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Element Default Value</label><br>
+			<input type='text' name='defaultProperty' id='defaultProperty'>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Column Name</label><br>
+			<input type='text' name='valueProperty' id='valueProperty' title="Spreadsheet or Database Column Name">
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<input type='hidden' name='elemId' id='elemId' value='<#[url.id]#>'>
+		</div>
+	</div>
+	<div style='width: 100%;padding: 0;' id="style">
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>CSS</label><br>
+			<textarea name='cssProperty' id='cssProperty' style="width: 430px;height: 215;"></textarea>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<input type='hidden' name='elemId' id='elemId' value='<#[url.id]#>'>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	$('#tabs').tabs();
+	
+	var guid = $("#elemId").val();
+	var label = $("#"+guid).find("label").text();
+	var name = $("#"+guid).find("input").attr('name');
+	var id = $("#"+guid).find("input").attr('id');
+	var value = $("#"+guid).find("input").attr('value');
+	var defaultval = $("#"+guid).find("input").attr('default');
+	
+	$("#labelProperty").val(label);
+	$("#nameProperty").val(name);
+	$("#idProperty").val(id);
+	$("#valueProperty").val(value);
+	$("#defaultProperty").val(defaultval);
+	
+});
+</script>

@@ -1,0 +1,35 @@
+<div id="tabs">
+	<ul>
+		<li><a href="#properties">Properties</a></li>
+		<li><a href="#style">Style</a></li>
+	</ul>
+	<div style='width: 100%;' id="properties">
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Form Type</label><br>
+			<select name='typeProperty' id='typeProperty'>
+				<option value='spreadsheet'>Spreadsheet</option>
+				<option value='database'>Database</option>
+			</select>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>Spreadsheet or Table Name</label><br>
+			<input type='text' name='sdnameProperty' id='sdnameProperty'>
+		</div>
+	</div>
+	<div style='width: 100%;padding: 0;' id="style">
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<label>CSS</label><br>
+			<textarea name='cssProperty' id='cssProperty' style="width: 430px;height: 215;"></textarea>
+		</div>
+		<div style='margin-bottom: 5px;padding: 5px;'>
+			<input type='hidden' name='elemId' id='elemId' value='<#[url.id]#>'>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#tabs').tabs();
+});	
+</script>
