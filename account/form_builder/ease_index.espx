@@ -1,5 +1,5 @@
-<# include "_htmlheader.espx" #>
-
+<# include "/account/header.espx" #>
+<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 <style type="text/css">
 .placeholder{padding: 100px 0px 100px 0px;text-align: center;}
 .controlBar{position: relative;float: right;width: 30%;min-height: 20px;text-align: right;display: inline;}
@@ -79,7 +79,7 @@ select{min-width: 150px;}
 </div>
 <div style="display: none;" id="codeCleaner"></div>
 <script type="text/javascript">
-
+jQuery = $.noConflict();
 //execute onload functions and methods
 jQuery(document).ready(function(){
 	
@@ -121,7 +121,7 @@ jQuery(document).ready(function(){
 			open: function(){
 				
 				//ajax load ease form settings page
-				var url = "/form_builder/ease_options/form_options";
+				var url = "/account/form_builder/ease_options/form_options";
 				$('#dialog').load(url, function(){});
 			},
 			buttons: {
@@ -286,43 +286,43 @@ jQuery(document).ready(function(){
 								open: function(){
 									switch(type){
 										case "Text Box":
-											var url = "/form_builder/ease_options/text_box_options?id="+guid;
+											var url = "/account/form_builder/ease_options/text_box_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Text Area":
-											var url = "/form_builder/ease_options/textarea_options?id="+guid;
+											var url = "/account/form_builder/ease_options/textarea_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Select":
-											var url = "/form_builder/ease_options/select_options?id="+guid;
+											var url = "/account/form_builder/ease_options/select_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Multiple Select":
-											var url = "/form_builder/ease_options/select_multiple_options?id="+guid;
+											var url = "/account/form_builder/ease_options/select_multiple_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Radio Button":
-											var url = "/form_builder/ease_options/radio_options?id="+guid;
+											var url = "/account/form_builder/ease_options/radio_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Check Box":
-											var url = "/form_builder/ease_options/check_box_options?id="+guid;
+											var url = "/account/form_builder/ease_options/check_box_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "hr":
-											var url = "/form_builder/ease_options/file_options?id="+guid;
+											var url = "/account/form_builder/ease_options/file_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "create":
-											var url = "/form_builder/ease_options/create_button_options?id="+guid;
+											var url = "/account/form_builder/ease_options/create_button_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "update":
-											var url = "/form_builder/ease_options/update_button_options?id="+guid;
+											var url = "/account/form_builder/ease_options/update_button_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "delete":
-											var url = "/form_builder/ease_options/delete_button_options?id="+guid;
+											var url = "/account/form_builder/ease_options/delete_button_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 									}
@@ -623,43 +623,43 @@ jQuery(document).ready(function(){
 						open: function(){
 							switch(type){
 								case "Text Box":
-									var url = "/form_builder/ease_options/text_box_options?id="+id;
+									var url = "/account/form_builder/ease_options/text_box_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Text Area":
-									var url = "/form_builder/ease_options/textarea_options?id="+id;
+									var url = "/account/form_builder/ease_options/textarea_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Select":
-									var url = "/form_builder/ease_options/select_options?id="+id;
+									var url = "/account/form_builder/ease_options/select_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Multiple Select":
-									var url = "/form_builder/ease_options/select_multiple_options?id="+id;
+									var url = "/account/form_builder/ease_options/select_multiple_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Radio Button":
-									var url = "/form_builder/ease_options/radio_options?id="+id;
+									var url = "/account/form_builder/ease_options/radio_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Check Box":
-									var url = "/form_builder/ease_options/check_box_options?id="+id;
+									var url = "/account/form_builder/ease_options/check_box_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "hr":
-									var url = "/form_builder/ease_options/file_options?id="+id;
+									var url = "/account/form_builder/ease_options/file_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "create":
-									var url = "/form_builder/ease_options/create_button_options?id="+id;
+									var url = "/account/form_builder/ease_options/create_button_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "update":
-									var url = "/form_builder/ease_options/update_button_options?id="+id;
+									var url = "/account/form_builder/ease_options/update_button_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "delete":
-									var url = "/form_builder/ease_options/delete_button_options?id="+id;
+									var url = "/account/form_builder/ease_options/delete_button_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 							}
@@ -1399,43 +1399,43 @@ function initDroppable(){
 								open: function(){
 									switch(type){
 										case "Text Box":
-											var url = "/form_builder/ease_options/text_box_options?id="+guid;
+											var url = "/account/form_builder/ease_options/text_box_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Text Area":
-											var url = "/form_builder/ease_options/textarea_options?id="+guid;
+											var url = "/account/form_builder/ease_options/textarea_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Select":
-											var url = "/form_builder/ease_options/select_options?id="+guid;
+											var url = "/account/form_builder/ease_options/select_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Multiple Select":
-											var url = "/form_builder/ease_options/select_multiple_options?id="+guid;
+											var url = "/account/form_builder/ease_options/select_multiple_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Radio Button":
-											var url = "/form_builder/ease_options/radio_options?id="+guid;
+											var url = "/account/form_builder/ease_options/radio_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "Check Box":
-											var url = "/form_builder/ease_options/check_box_options?id="+guid;
+											var url = "/account/form_builder/ease_options/check_box_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "hr":
-											var url = "/form_builder/ease_options/file_options?id="+guid;
+											var url = "/account/form_builder/ease_options/file_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "create":
-											var url = "/form_builder/ease_options/create_button_options?id="+guid;
+											var url = "/account/form_builder/ease_options/create_button_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "update":
-											var url = "/form_builder/ease_options/update_button_options?id="+guid;
+											var url = "/account/form_builder/ease_options/update_button_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 										case "delete":
-											var url = "/form_builder/ease_options/delete_button_options?id="+guid;
+											var url = "/account/form_builder/ease_options/delete_button_options?id="+guid;
 											$('#dialog').load(url, function(){});
 											break;
 									}
@@ -1720,43 +1720,43 @@ function initDroppable(){
 						open: function(){
 							switch(type){
 								case "Text Box":
-									var url = "/form_builder/ease_options/text_box_options?id="+id;
+									var url = "/account/form_builder/ease_options/text_box_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Text Area":
-									var url = "/form_builder/ease_options/textarea_options?id="+id;
+									var url = "/account/form_builder/ease_options/textarea_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Select":
-									var url = "/form_builder/ease_options/select_options?id="+id;
+									var url = "/account/form_builder/ease_options/select_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Multiple Select":
-									var url = "/form_builder/ease_options/select_multiple_options?id="+id;
+									var url = "/account/form_builder/ease_options/select_multiple_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Radio Button":
-									var url = "/form_builder/ease_options/radio_options?id="+id;
+									var url = "/account/form_builder/ease_options/radio_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "Check Box":
-									var url = "/form_builder/ease_options/check_box_options?id="+id;
+									var url = "/account/form_builder/ease_options/check_box_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "hr":
-									var url = "/form_builder/ease_options/file_options?id="+id;
+									var url = "/account/form_builder/ease_options/file_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "create":
-									var url = "/form_builder/ease_options/create_button_options?id="+id;
+									var url = "/account/form_builder/ease_options/create_button_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "update":
-									var url = "/form_builder/ease_options/update_button_options?id="+id;
+									var url = "/account/form_builder/ease_options/update_button_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 								case "delete":
-									var url = "/form_builder/ease_options/delete_button_options?id="+id;
+									var url = "/account/form_builder/ease_options/delete_button_options?id="+id;
 									$('#dialog').load(url, function(){});
 									break;
 							}
@@ -1980,5 +1980,4 @@ function initDroppable(){
 }	
 </script>
 
-<# include "_member_footer.espx" #>
-<# include "_htmlfooter.espx" #>
+<# include "footer.espx" #>
